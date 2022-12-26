@@ -7,7 +7,6 @@
 - GORM with Postgres
 - Session authentication
 
-
 ## Usage
 - Copy to a directory of your choosing
 - Run the following command just replacing `YOURNAMEHERE` with your desired name
@@ -30,8 +29,11 @@ sed -i '' 's/music_manager/go_ssr_template/g' ./*
 - [] Look more at making a dev container
   - Maybe there's some easy way to make it portable across x86 and arm
 - [] Standalone API handler framework (like site but without the renderer)
-- [] Rethink the GetXMethod handler system
+- [x] Rethink the GetXMethod handler system
   - It adds too much boilerplate 
+- [] Maybe think of a way to hardcode in the path to be used outside each page for redirection
+  - Probably just consts 
+- [] Add a menu system to frame
 
 
 

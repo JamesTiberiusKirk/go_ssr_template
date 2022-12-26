@@ -1,9 +1,9 @@
 package site
 
 import (
-	"html/template"
 	"go_ssr_template/session"
 	"go_ssr_template/site/page"
+	"html/template"
 
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/echoview-v4"
@@ -14,8 +14,8 @@ import (
 // Site site struct with config and dependencies
 type Site struct {
 	rootSitePath   string
-	publicPages    []page.PageInterface
-	authedPages    []page.PageInterface
+	publicPages    []*page.Page
+	authedPages    []*page.Page
 	db             *gorm.DB
 	sessionManager *session.Manager
 	echo           *echo.Echo
@@ -25,15 +25,15 @@ type Site struct {
 }
 
 // NewSite init Site
-func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager, e *echo.Echo,
-	sessionSecret string) Site {
+func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
+	e *echo.Echo, sessionSecret string) Site {
 	return Site{
 		rootSitePath: rootSitePath,
-		publicPages: []page.PageInterface{
+		publicPages: []*page.Page{
 			page.NewLoginPage(db, sessionManager),
 			page.NewSignupPage(db, sessionManager),
 		},
-		authedPages: []page.PageInterface{
+		authedPages: []*page.Page{
 			page.NewHomePage(db),
 		},
 		db:             db,
@@ -47,6 +47,7 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager, 
 // Serve to start the server
 func (s *Site) Serve() {
 	s.buildRenderer()
+
 	s.mapPages(&s.publicPages)
 	s.mapPages(&s.authedPages, session.SessionAuthMiddleware(s.sessionManager))
 }
@@ -61,14 +62,22 @@ func (s *Site) buildRenderer() {
 	})
 }
 
-func (s *Site) mapPages(pages *[]page.PageInterface, middlewares ...echo.MiddlewareFunc) {
+func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {
 	for _, p := range *pages {
-		s.echo.GET(p.GetPagePath(), p.GetPageHandler(), middlewares...)
+		s.echo.GET(p.Path, p.GetPageHandler(), middlewares...)
 
-		post := p.GetPostHandler()
-		if post != nil {
-			s.echo.POST(p.GetPagePath(), post, middlewares...)
+		if p.GetPostHandler != nil {
+			s.echo.POST(p.Path, p.GetPostHandler, middlewares...)
 		}
+
+		if p.GetDeleteHandler != nil {
+			s.echo.DELETE(p.Path, p.GetDeleteHandler, middlewares...)
+		}
+
+		if p.GetPutHandler != nil {
+			s.echo.PUT(p.Path, p.GetPutHandler, middlewares...)
+		}
+
 	}
 
 }

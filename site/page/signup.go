@@ -19,26 +19,33 @@ type SignupPage struct {
 }
 
 type SignupPageData struct {
-	Title      string
+	PageData
 	Message    string
-	UrlError   string
 	Validation models.User
 }
 
-func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *SignupPage {
-	return &SignupPage{
-		path:           "/signup",
-		template:       "signup",
+func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
+	deps := &SignupPage{
 		db:             db,
 		sessionManager: sessionManager,
+	}
+
+	return &Page{
+		Path:           "/signup",
+		Template:       "signup",
+		Deps:           deps,
+		GetPageData:    deps.GetPageData,
+		GetPostHandler: deps.GetPostHandler(),
 	}
 }
 
 func (p *SignupPage) GetPageData(c echo.Context) any {
 	return SignupPageData{
-		Title:    "Signup page",
-		Message:  c.QueryParam("message"),
-		UrlError: c.QueryParam("error"),
+		Message: c.QueryParam("message"),
+		PageData: PageData{
+			Title:    "Signup page",
+			UrlError: c.QueryParam("error"),
+		},
 		Validation: models.User{
 			Email:    c.QueryParam("email"),
 			Username: c.QueryParam("username"),
@@ -85,17 +92,5 @@ func (p *SignupPage) GetPostHandler() echo.HandlerFunc {
 		}
 
 		return c.Redirect(http.StatusSeeOther, p.path+"?message=Successful")
-	}
-}
-
-func (p *SignupPage) GetPagePath() string {
-	return p.path
-}
-
-func (p *SignupPage) GetPageHandler() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.Render(http.StatusOK, p.template, echo.Map{
-			"data": p.GetPageData(c),
-		})
 	}
 }
