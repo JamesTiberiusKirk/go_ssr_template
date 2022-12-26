@@ -15,7 +15,7 @@ find . -type f -not -path './db-mount/*' -not -path './.git/*' -exec sed -i '' '
 ```
 - If its a clean repo just the simpler sed only command will work also
 ```sh 
-sed -i '' 's/music_manager/go_ssr_template/g' ./* 
+sed -i '' 's/go_ssr_template/YOURNAMEHERE/g' ./* 
 ```
 
 ## TODOs:
