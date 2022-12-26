@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"music_manager/session"
-	"music_manager/site"
+	"go_ssr_template/session"
+	"go_ssr_template/site"
 )
 
 func main() {

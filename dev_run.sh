@@ -10,4 +10,4 @@ export HTTP_PORT=:3000
 export HTTP_ROOT_PATH=/v1
 export SESSION_SECRET=super_secret
 
-reflex -d none -sr '.*\.(go|gohtml|env)$' -- go run music_manager
+reflex -d none -sr '.*\.(go|gohtml|env)$' -- go run go_ssr_template

@@ -1,4 +1,4 @@
-module music_manager
+module go_ssr_template
 
 go 1.19
 

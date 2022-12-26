@@ -1,8 +1,8 @@
 package page
 
 import (
-	"music_manager/models"
-	"music_manager/session"
+	"go_ssr_template/models"
+	"go_ssr_template/session"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

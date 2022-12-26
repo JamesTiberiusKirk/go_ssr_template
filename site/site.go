@@ -2,8 +2,8 @@ package site
 
 import (
 	"html/template"
-	"music_manager/session"
-	"music_manager/site/page"
+	"go_ssr_template/session"
+	"go_ssr_template/site/page"
 
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/echoview-v4"

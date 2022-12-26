@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"music_manager/models"
+	"go_ssr_template/models"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

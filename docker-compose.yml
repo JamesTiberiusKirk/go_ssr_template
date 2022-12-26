@@ -1,7 +1,7 @@
 version: "3.5"
 
 services:
-  # music_manager:
+  # go_ssr_template:
   #   build: 
   #     context: .
   #     dockerfile: ./Dockerfile.dev
@@ -27,6 +27,6 @@ services:
       environment:
         POSTGRES_USER: postgres 
         POSTGRES_PASSWORD: password 
-        POSTGRES_DB: music_manager 
+        POSTGRES_DB: go_ssr_template 
       volumes:
         - ./db-mount:/var/lib/postgresql/data/
