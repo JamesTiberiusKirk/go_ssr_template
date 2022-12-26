@@ -1,0 +1,16 @@
+FROM ubuntu:latest
+
+USER root
+
+WORKDIR /usr/local
+RUN apt update -y && \
+    apt install -y build-essential apt-transport-https curl git
+RUN curl -OL https://go.dev/dl/go1.19.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.19.linux-amd64.tar.gz
+ENV PATH="${PATH}:/usr/local/go/bin:/root/go/bin"
+RUN  go install github.com/cespare/reflex@latest
+
+WORKDIR /app
+
+# add env setup and entrypoint 
+RUN apt-get clean
