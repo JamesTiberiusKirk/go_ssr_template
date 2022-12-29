@@ -40,9 +40,7 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 }
 
 func (p *LoginPage) GetPageData(c echo.Context) any {
-	pageData := LoginPageData{}
-
-	return pageData
+	return LoginPageData{}
 }
 
 func (p *LoginPage) GetPostHandler() echo.HandlerFunc {
