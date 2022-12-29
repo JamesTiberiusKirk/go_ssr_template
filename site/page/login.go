@@ -10,14 +10,16 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	loginPageUri = "/login"
+)
+
 type LoginPage struct {
-	Page
 	db             *gorm.DB
 	sessionManager *session.Manager
 }
 
 type LoginPageData struct {
-	PageData
 }
 
 func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
@@ -27,7 +29,9 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	}
 
 	return &Page{
-		Path:           "/login",
+		MenuID:         "login-page",
+		Title:          "Login",
+		Path:           loginPageUri,
 		Template:       "login",
 		Deps:           deps,
 		GetPageData:    deps.GetPageData,
@@ -36,13 +40,7 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 }
 
 func (p *LoginPage) GetPageData(c echo.Context) any {
-	pageData := LoginPageData{
-		PageData: PageData{
-			Title:    "Login page",
-			UrlError: c.QueryParam("error"),
-			Success:  c.QueryParam("success"),
-		},
-	}
+	pageData := LoginPageData{}
 
 	return pageData
 }
@@ -55,7 +53,7 @@ func (p *LoginPage) GetPostHandler() echo.HandlerFunc {
 		}
 
 		if submitUser.Password == "" || submitUser.Email == "" {
-			return c.Redirect(http.StatusSeeOther, p.Path+"?error=need username and password")
+			return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=need username and password")
 		}
 
 		dbUser := &models.User{}
@@ -64,11 +62,11 @@ func (p *LoginPage) GetPostHandler() echo.HandlerFunc {
 			logrus.
 				WithError(result.Error).
 				Error("error getting user from the database")
-			return c.Redirect(http.StatusSeeOther, p.Path+"?error=internal server problem")
+			return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=internal server problem")
 		}
 
 		if dbUser.Password == "" {
-			return c.Redirect(http.StatusSeeOther, p.Path+"?error=wrong user name or password")
+			return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=wrong user name or password")
 		}
 
 		comparison, err := dbUser.ComparePassword(submitUser.Password)
@@ -76,14 +74,14 @@ func (p *LoginPage) GetPostHandler() echo.HandlerFunc {
 			logrus.
 				WithError(err).
 				Error("error comparing passwords")
-			return c.Redirect(http.StatusSeeOther, p.Path+"?error=internal server problem")
+			return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=internal server problem")
 		}
 
 		if !comparison {
-			return c.Redirect(http.StatusSeeOther, p.Path+"?error=wrong user name or password")
+			return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=wrong user name or password")
 		}
 
 		p.sessionManager.InitSession(dbUser.Email, dbUser.ID, c)
-		return c.Redirect(http.StatusSeeOther, p.Path+"?success=logged in")
+		return c.Redirect(http.StatusSeeOther, homePageUri)
 	}
 }

@@ -1,6 +1,10 @@
 <html>
   <head>
     <style>
+      #page_content{
+        border: red solid 3px;
+      }
+
       .invalid_data_message{
         color: red;
       }
@@ -8,6 +12,15 @@
   </head>
   <body>
     <h1>Go SSR Boilerplate</h1>
-    {{template "content" .}}
+    PAGE: {{ .meta.MenuID }}
+
+    <div id="page_content">
+      {{template "content" .}}
+    </div>
+
+    <!-- for debugging data -->
+    <script>
+      console.log({{.data}})
+    </script>
   </body>
 </html>

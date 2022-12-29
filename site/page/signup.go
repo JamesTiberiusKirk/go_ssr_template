@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go_ssr_template/models"
 	"go_ssr_template/session"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -11,17 +12,22 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	signupPageUri = "/signup"
+)
+
 type SignupPage struct {
-	path           string
-	template       string
 	db             *gorm.DB
 	sessionManager *session.Manager
 }
 
 type SignupPageData struct {
-	PageData
 	Message    string
-	Validation models.User
+	Validation struct {
+		models.User
+		RepeatPassword string
+	}
+	Misc string
 }
 
 func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
@@ -31,6 +37,8 @@ func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	}
 
 	return &Page{
+		MenuID:         "signup-page",
+		Title:          "Signup",
 		Path:           "/signup",
 		Template:       "signup",
 		Deps:           deps,
@@ -40,42 +48,57 @@ func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 }
 
 func (p *SignupPage) GetPageData(c echo.Context) any {
-	return SignupPageData{
+	data := SignupPageData{
 		Message: c.QueryParam("message"),
-		PageData: PageData{
-			Title:    "Signup page",
-			UrlError: c.QueryParam("error"),
-		},
-		Validation: models.User{
-			Email:    c.QueryParam("email"),
-			Username: c.QueryParam("username"),
-			Password: c.QueryParam("password"),
-		},
 	}
+
+	data.Validation.Email = c.QueryParam("email")
+	data.Validation.Username = c.QueryParam("username")
+	data.Validation.Password = c.QueryParam("password")
+	data.Validation.RepeatPassword = c.QueryParam("repeat_password")
+
+	data.Misc = fmt.Sprintf("%+v", data.Validation)
+
+	return data
 }
 
 func (p *SignupPage) GetPostHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user := models.User{
-			Email:    c.FormValue("email"),
-			Username: c.FormValue("username"),
-			Password: c.FormValue("password"),
+		user := struct {
+			models.User
+			RepeatPassword string
+		}{
+			User: models.User{
+				Email:    c.FormValue("email"),
+				Username: c.FormValue("username"),
+				Password: c.FormValue("password"),
+			},
+			RepeatPassword: c.FormValue("repeat_password"),
 		}
+
+		// TODO: use the redirect() function
+		// query := map[string]string{}
 
 		notPassed, err := user.Validate()
 		if err != nil {
 			logrus.
 				WithError(err).
 				Error("Error validating signup form")
-			return c.Redirect(http.StatusSeeOther, p.path+"?error=internal server error")
+			return c.Redirect(http.StatusSeeOther, signupPageUri+"?error=internal server error")
 		}
 
-		if len(notPassed) != 0 {
+		if user.Password != user.RepeatPassword {
+			notPassed = append(notPassed, "repeat_password")
+		}
+
+		log.Printf("%+v", notPassed)
+
+		if len(notPassed) > 0 {
 			query := "?error=Unable to validate data"
 			for _, fields := range notPassed {
 				query = fmt.Sprintf("%s&%s=not valid", query, fields)
 			}
-			return c.Redirect(http.StatusSeeOther, p.path+query)
+			return c.Redirect(http.StatusSeeOther, signupPageUri+query)
 		}
 
 		user.SetPassword(user.Password)
@@ -87,10 +110,11 @@ func (p *SignupPage) GetPostHandler() echo.HandlerFunc {
 				WithError(result.Error).
 				Error(msg)
 
-			redirectURL := fmt.Sprintf("%s?error=Internal server error", p.path)
+			redirectURL := fmt.Sprintf("%s?error=Internal server error", signupPageUri)
 			c.Redirect(http.StatusSeeOther, redirectURL)
 		}
 
-		return c.Redirect(http.StatusSeeOther, p.path+"?message=Successful")
+		p.sessionManager.InitSession(user.Email, user.ID, c)
+		return c.Redirect(http.StatusSeeOther, homePageUri)
 	}
 }

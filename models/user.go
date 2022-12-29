@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	hashCost      = 4
-	emailRegex    = `^([1-zA-Z0-1@.\s]{1,255})$`
+	hashCost   = 4
+	emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+
 	passwordRegex = `^[a-zA-Z]\w{3,14}$`
 )
 

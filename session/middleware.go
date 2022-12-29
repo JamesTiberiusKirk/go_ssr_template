@@ -1,7 +1,6 @@
 package session
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,8 +13,6 @@ func SessionAuthMiddleware(sessionManager *Manager) echo.MiddlewareFunc {
 	return echoSession.MiddlewareWithConfig(echoSession.Config{
 		Skipper: func(c echo.Context) bool {
 			skip := sessionManager.IsAuthenticated(c)
-			log.Printf("Middleware skipper func: %t", skip)
-
 			if !skip {
 				c.Redirect(http.StatusSeeOther, "/login")
 			}

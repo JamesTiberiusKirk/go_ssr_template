@@ -77,7 +77,5 @@ func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc)
 		if p.GetPutHandler != nil {
 			s.echo.PUT(p.Path, p.GetPutHandler, middlewares...)
 		}
-
 	}
-
 }

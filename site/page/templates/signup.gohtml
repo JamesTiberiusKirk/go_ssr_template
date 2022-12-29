@@ -1,29 +1,45 @@
 {{ define "content" }}
 
 <h1>Signup Page</h1>
-{{if .data.UrlError}}
+{{if .meta.UrlError }}
   <h1>ERROR</h1>
-  <h1>{{.data.UrlError}}</h1>
+  <p>{{.meta.UrlError }}</p>
+{{end}}
+
+{{if .data.Message }}
+  <h1>Message</h1>
+  <p>{{.data.Message }}</p>
 {{end}}
 
 <form method="POST">
-  <label for="email">Email:</label><br/>
-  {{if .data.Validation.Email}}
-    <label class="invalid_data_message" for="email">{{.data.Validation.Email}}</label><br/>
+  <label for="email">Email:</label>
+  {{if .data.Validation.Email }}
+    <label class="invalid_data_message" for="email">{{ .data.Validation.Email }}</label>
   {{end}}
+  <br/>
   <input type="text" id="email" name="email"><br/>
-  <label for="username">Username:</label><br/>
-  {{if .data.Validation.Username}}
-    <label class="invalid_data_message" for="username">{{.data.Validation.Username}}</label><br/>
+
+  <label for="username">Username:</label>
+  {{if .data.Validation.Username }}
+    <label class="invalid_data_message" for="username">{{ .data.Validation.Username }}</label>
   {{end}}
+  <br/>
   <input type="text" id="username" name="username"><br/>
-  <label for="password">Password:</label><br/>
-  {{if .data.Validation.Password}}
-    <label class="invalid_data_message" for="username">{{.data.Validation.Password}}</label><br/>
+
+  <label for="password">Password:</label>
+  {{if .data.Validation.Password }}
+    <label class="invalid_data_message" for="username">{{ .data.Validation.Password }}</label>
   {{end}}
+  <br/>
   <input type="password" id="password" name="password"><br/>
-  <label for="repeat_password">Repeat Password:</label><br/>
+
+  <label for="repeat_password">Repeat Password:</label>
+  {{if .data.Validation.RepeatPassword }}
+    <label class="invalid_data_message" for="repeat_password">Passwords do not match</label>
+  {{end}}
+  <br/>
   <input type="repeat_password" id="repeat_password" name="repeat_password"><br/>
+
   <input type="submit"><br/>
 </form>
 

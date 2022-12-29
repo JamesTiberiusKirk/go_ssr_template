@@ -1,21 +1,23 @@
 {{ define "content" }}
 
 <h1>Login Page</h1>
-{{if .data.UrlError}}
+{{if .meta.UrlError}}
   <h1>ERROR</h1>
-  <h1>{{.data.UrlError}}</h1>
+  <h1>{{.meta.UrlError}}</h1>
 {{end}}
 
-{{if .data.Success}}
+{{if .meta.Success}}
   <h1>SUCCESS</h1>
-  <h1>{{.data.Success}}</h1>
+  <h1>{{.meta.Success}}</h1>
 {{end}}
 <form method="POST">
   <label for="email">Email:</label><br>
-  <input type="text" id="email" name="email"><br>
-  <label for="password">Password:</label><br>
-  <input type="password" id="password" name="password">
+  <input type="text" id="email" name="email"><br/>
+  <label for="password">Password:</label><br/>
+  <input type="password" id="password" name="password"><br/>
   <input type="submit">
 </form>
+
+<a href="/signup">Create Account</a>
 
 {{end}}

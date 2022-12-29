@@ -4,9 +4,12 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
-type PageData struct {
+// PageMetaData is used to give certain page meta data and basic params to each template
+type PageMetaData struct {
+	MenuID   string
 	Title    string
 	UrlError string
 	Success  string
@@ -15,6 +18,8 @@ type PageData struct {
 // Page is used by every page in a site
 // Deps being each page's own struct for dependencies, might not even be needed
 type Page struct {
+	MenuID           string
+	Title            string
 	Path             string
 	Template         string
 	Deps             interface{}
@@ -27,9 +32,26 @@ type Page struct {
 // GetPageHandler is a get handler which uses the echo Render function
 func (p *Page) GetPageHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return c.Render(http.StatusOK, p.Template, echo.Map{
-			"data": p.GetPageData(c),
+		pageData := p.GetPageData(c)
+		err := c.Render(http.StatusOK, p.Template, echo.Map{
+			"data": pageData,
+			"meta": p.buildBasePageMetaData(c),
 		})
+
+		if err != nil {
+			logrus.WithError(err).Error("Template render error")
+		}
+
+		return err
+	}
+}
+
+func (p *Page) buildBasePageMetaData(c echo.Context) PageMetaData {
+	return PageMetaData{
+		MenuID:   p.MenuID,
+		Title:    p.Title,
+		UrlError: c.QueryParam("error"),
+		Success:  c.QueryParam("success"),
 	}
 }
 

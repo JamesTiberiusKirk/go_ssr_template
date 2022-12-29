@@ -1,20 +1,19 @@
 package page
 
 import (
-	"log"
-
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
+const (
+	homePageUri = "/"
+)
+
 type HomePage struct {
-	path     string
-	template string
-	db       *gorm.DB
+	db *gorm.DB
 }
 
 type HomePageData struct {
-	Title string
 }
 
 func NewHomePage(db *gorm.DB) *Page {
@@ -23,7 +22,9 @@ func NewHomePage(db *gorm.DB) *Page {
 	}
 
 	return &Page{
-		Path:        "/",
+		MenuID:      "home-page",
+		Title:       "Home Page",
+		Path:        homePageUri,
 		Template:    "homepage",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
@@ -31,8 +32,6 @@ func NewHomePage(db *gorm.DB) *Page {
 }
 
 func (p *HomePage) GetPageData(c echo.Context) any {
-	log.Print("Home page")
-	return HomePageData{
-		Title: "Hello world",
-	}
+
+	return HomePageData{}
 }

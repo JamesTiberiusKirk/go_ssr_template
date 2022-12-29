@@ -19,21 +19,25 @@ sed -i '' 's/go_ssr_template/YOURNAMEHERE/g' ./*
 ```
 
 ## TODOs:
-- [] Link all of the libraries in "featuring" section
-- [] Actually setup the rootSitePath
-- [] Setup a good way to serve static content such as libraries
-- [] Maybe think about setting up some theme or CSS library?
-- [] Maybe find an actual way to load up the .env file in the dev_run.sh
-- [] Make some CLI or script for easy deployment of this Template
+- [ ] Link all of the libraries in "featuring" section
+- [ ] Actually setup the rootSitePath
+- [ ] Setup a good way to serve static content such as libraries
+- [ ] Maybe think about setting up some theme or CSS library?
+- [ ] Maybe find an actual way to load up the .env file in the dev_run.sh
+- [ ] Make some CLI or script for easy deployment of this Template
   - Not much needed other then copying the folder then using `sed -i` to replace the name to the desired one
-- [] Look more at making a dev container
+- [ ] Look more at making a dev container
   - Maybe there's some easy way to make it portable across x86 and arm
-- [] Standalone API handler framework (like site but without the renderer)
+- [ ] Standalone API handler framework (like site but without the renderer)
 - [x] Rethink the GetXMethod handler system
   - It adds too much boilerplate 
-- [] Maybe think of a way to hardcode in the path to be used outside each page for redirection
+- [ ] Maybe think of a way to hardcode in the path to be used outside each page for redirection
   - Probably just consts 
-- [] Add a menu system to frame
+- [x] Add a menu system to frame and pages
+  - [ ] Just need to actually create a menu in the templates 
+- [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
+- [ ] Add support for WASM inside pages
+  - Maybe look at one of the WASM frameworks out there for go
 
 
 
