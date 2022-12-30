@@ -1,0 +1,18 @@
+{{ define "content" }}
+<h1>{{.meta.Title}}</h1>
+
+<div id="content"></div>
+
+<script>
+console.log("Hello world")
+
+fetch("/api/v1/user").then(res=>{
+  res.json().then(body=>{
+    console.log(body)
+    contentDiv = document.getElementById("content")
+    contentDiv.innerHTML = JSON.stringify( body)
+  })
+})
+</script>
+
+{{end}}

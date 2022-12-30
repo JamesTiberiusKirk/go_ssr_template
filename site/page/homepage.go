@@ -2,7 +2,6 @@ package page
 
 import (
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 const (
@@ -10,16 +9,13 @@ const (
 )
 
 type HomePage struct {
-	db *gorm.DB
 }
 
 type HomePageData struct {
 }
 
-func NewHomePage(db *gorm.DB) *Page {
-	deps := &HomePage{
-		db: db,
-	}
+func NewHomePage() *Page {
+	deps := &HomePage{}
 
 	return &Page{
 		MenuID:      "home-page",

@@ -11,4 +11,4 @@ export HTTP_ROOT_PATH=
 export HTTP_ROOT_API_PATH=/api/v1
 export SESSION_SECRET=super_secret
 
-reflex -d none -sr '.*\.(go|gohtml|env)$' -- go run go_ssr_template
+reflex -d none -sr '.*\.(go|env)$' -- go run go_ssr_template
