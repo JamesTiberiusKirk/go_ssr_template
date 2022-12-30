@@ -21,12 +21,11 @@ type Site struct {
 	echo           *echo.Echo
 	frameTmpl      string
 	tmplFuncs      template.FuncMap
-	sessionSecret  string
 }
 
 // NewSite init Site
 func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
-	e *echo.Echo, sessionSecret string) Site {
+	e *echo.Echo) Site {
 	return Site{
 		rootSitePath: rootSitePath,
 		publicPages: []*page.Page{
@@ -40,7 +39,6 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
 		sessionManager: sessionManager,
 		echo:           e,
 		frameTmpl:      "frame",
-		sessionSecret:  sessionSecret,
 	}
 }
 
@@ -64,18 +62,18 @@ func (s *Site) buildRenderer() {
 
 func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {
 	for _, p := range *pages {
-		s.echo.GET(p.Path, p.GetPageHandler(), middlewares...)
+		s.echo.GET(s.rootSitePath+p.Path, p.GetPageHandler(), middlewares...)
 
 		if p.GetPostHandler != nil {
-			s.echo.POST(p.Path, p.GetPostHandler, middlewares...)
+			s.echo.POST(s.rootSitePath+p.Path, p.GetPostHandler, middlewares...)
 		}
 
 		if p.GetDeleteHandler != nil {
-			s.echo.DELETE(p.Path, p.GetDeleteHandler, middlewares...)
+			s.echo.DELETE(s.rootSitePath+p.Path, p.GetDeleteHandler, middlewares...)
 		}
 
 		if p.GetPutHandler != nil {
-			s.echo.PUT(p.Path, p.GetPutHandler, middlewares...)
+			s.echo.PUT(s.rootSitePath+p.Path, p.GetPutHandler, middlewares...)
 		}
 	}
 }

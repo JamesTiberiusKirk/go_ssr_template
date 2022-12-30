@@ -32,6 +32,5 @@ func NewHomePage(db *gorm.DB) *Page {
 }
 
 func (p *HomePage) GetPageData(c echo.Context) any {
-
 	return HomePageData{}
 }

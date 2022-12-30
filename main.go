@@ -17,7 +17,7 @@ func main() {
 
 	sessionManager := session.New()
 
-	s := site.NewSite(config.Http.RootPath, db, sessionManager, e, config.SessionSecret)
+	s := site.NewSite(config.Http.RootPath, db, sessionManager, e)
 	s.Serve()
 
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")
