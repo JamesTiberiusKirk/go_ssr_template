@@ -19,7 +19,8 @@ type Api struct {
 }
 
 // NewApi new api instance
-func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB, sesessionManager *session.Manager) *Api {
+func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
+	sesessionManager *session.Manager) *Api {
 	return &Api{
 		rootApiPath:  rootApiPath,
 		publicRoutes: []*route.Route{},
