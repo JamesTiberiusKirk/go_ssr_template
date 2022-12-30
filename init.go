@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"go_ssr_template/models"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -29,19 +29,51 @@ func initDb(c Config) *gorm.DB {
 }
 
 func initLogger() {
-	logrus.SetFormatter(&logrus.JSONFormatter{
-		FieldMap: logrus.FieldMap{
-			logrus.FieldKeyLevel: "severity",
-			logrus.FieldKeyTime:  "log_time",
-		},
+	// logrus.SetFormatter(&logrus.JSONFormatter{
+	// 	FieldMap: logrus.FieldMap{
+	// 		logrus.FieldKeyLevel: "severity",
+	// 		logrus.FieldKeyTime:  "log_time",
+	// 	},
+	// })
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp:          true,
+		DisableLevelTruncation: true,
+		PadLevelText:           true,
 	})
 }
 
 func initServer(c Config) *echo.Echo {
 	e := echo.New()
 
-	// Middleware
-	e.Use(middleware.Logger())
+	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogURI:       true,
+		LogStatus:    true,
+		LogUserAgent: true,
+		LogLatency:   true,
+		LogError:     true,
+		LogRemoteIP:  true,
+		LogValuesFunc: func(c echo.Context, values middleware.RequestLoggerValues) error {
+			mwLog := logrus.WithFields(logrus.Fields{
+				"URI":       values.URI,
+				"status":    values.Status,
+				"agent":     values.UserAgent,
+				"latency":   values.Latency,
+				"remote_ip": values.RemoteIP,
+			})
+
+			if values.Error != nil {
+				mwLog.
+					WithError(values.Error).
+					Error("request error")
+				return values.Error
+			}
+
+			mwLog.Info("request")
+
+			return nil
+		},
+	}))
+
 	e.Use(middleware.Recover())
 
 	return e

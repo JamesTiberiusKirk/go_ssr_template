@@ -15,8 +15,9 @@ type Config struct {
 		Pass string `env:"DB_PASS"`
 	}
 	Http struct {
-		Port     string `env:"HTTP_PORT"`
-		RootPath string `env:"HTTP_ROOT_PATH"`
+		Port        string `env:"HTTP_PORT"`
+		RootPath    string `env:"HTTP_ROOT_PATH"`
+		RootApiPath string `env:"HTTP_ROOT_API_PATH"`
 	}
 	SessionSecret string `env:"SESSION_SECRET"`
 	Extras        env.EnvSet

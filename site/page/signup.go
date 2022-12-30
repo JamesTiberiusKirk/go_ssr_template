@@ -37,13 +37,13 @@ func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	}
 
 	return &Page{
-		MenuID:         "signup-page",
-		Title:          "Signup",
-		Path:           "/signup",
-		Template:       "signup",
-		Deps:           deps,
-		GetPageData:    deps.GetPageData,
-		GetPostHandler: deps.GetPostHandler(),
+		MenuID:      "signup-page",
+		Title:       "Signup",
+		Path:        "/signup",
+		Template:    "signup",
+		Deps:        deps,
+		GetPageData: deps.GetPageData,
+		PostHandler: deps.PostHandler,
 	}
 }
 
@@ -62,59 +62,57 @@ func (p *SignupPage) GetPageData(c echo.Context) any {
 	return data
 }
 
-func (p *SignupPage) GetPostHandler() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		user := struct {
-			models.User
-			RepeatPassword string
-		}{
-			User: models.User{
-				Email:    c.FormValue("email"),
-				Username: c.FormValue("username"),
-				Password: c.FormValue("password"),
-			},
-			RepeatPassword: c.FormValue("repeat_password"),
-		}
-
-		// TODO: use the redirect() function
-		// query := map[string]string{}
-
-		notPassed, err := user.Validate()
-		if err != nil {
-			logrus.
-				WithError(err).
-				Error("Error validating signup form")
-			return c.Redirect(http.StatusSeeOther, signupPageUri+"?error=internal server error")
-		}
-
-		if user.Password != user.RepeatPassword {
-			notPassed = append(notPassed, "repeat_password")
-		}
-
-		log.Printf("%+v", notPassed)
-
-		if len(notPassed) > 0 {
-			query := "?error=Unable to validate data"
-			for _, fields := range notPassed {
-				query = fmt.Sprintf("%s&%s=not valid", query, fields)
-			}
-			return c.Redirect(http.StatusSeeOther, signupPageUri+query)
-		}
-
-		user.SetPassword(user.Password)
-
-		result := p.db.WithContext(c.Request().Context()).Create(&user)
-		if result.Error != nil {
-			msg := "failed to insert user into db"
-			logrus.
-				WithError(result.Error).
-				Error(msg)
-
-			redirectURL := fmt.Sprintf("%s?error=Internal server error", signupPageUri)
-			c.Redirect(http.StatusSeeOther, redirectURL)
-		}
-
-		p.sessionManager.InitSession(user.Email, user.ID, c)
-		return c.Redirect(http.StatusSeeOther, homePageUri)
+func (p *SignupPage) PostHandler(c echo.Context) error {
+	user := struct {
+		models.User
+		RepeatPassword string
+	}{
+		User: models.User{
+			Email:    c.FormValue("email"),
+			Username: c.FormValue("username"),
+			Password: c.FormValue("password"),
+		},
+		RepeatPassword: c.FormValue("repeat_password"),
 	}
+
+	// TODO: use the redirect() function
+	// query := map[string]string{}
+
+	notPassed, err := user.Validate()
+	if err != nil {
+		logrus.
+			WithError(err).
+			Error("Error validating signup form")
+		return c.Redirect(http.StatusSeeOther, signupPageUri+"?error=internal server error")
+	}
+
+	if user.Password != user.RepeatPassword {
+		notPassed = append(notPassed, "repeat_password")
+	}
+
+	log.Printf("%+v", notPassed)
+
+	if len(notPassed) > 0 {
+		query := "?error=Unable to validate data"
+		for _, fields := range notPassed {
+			query = fmt.Sprintf("%s&%s=not valid", query, fields)
+		}
+		return c.Redirect(http.StatusSeeOther, signupPageUri+query)
+	}
+
+	user.SetPassword(user.Password)
+
+	result := p.db.WithContext(c.Request().Context()).Create(&user)
+	if result.Error != nil {
+		msg := "failed to insert user into db"
+		logrus.
+			WithError(result.Error).
+			Error(msg)
+
+		redirectURL := fmt.Sprintf("%s?error=Internal server error", signupPageUri)
+		c.Redirect(http.StatusSeeOther, redirectURL)
+	}
+
+	p.sessionManager.InitSession(user.Email, user.ID, c)
+	return c.Redirect(http.StatusSeeOther, homePageUri)
 }

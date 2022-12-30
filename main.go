@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"go_ssr_template/api"
 	"go_ssr_template/session"
 	"go_ssr_template/site"
 )
@@ -19,6 +20,10 @@ func main() {
 
 	s := site.NewSite(config.Http.RootPath, db, sessionManager, e)
 	s.Serve()
+
+	a := api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
+		sessionManager)
+	a.Serve()
 
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")
 	fmt.Print(string(data))

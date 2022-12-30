@@ -64,16 +64,16 @@ func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc)
 	for _, p := range *pages {
 		s.echo.GET(s.rootSitePath+p.Path, p.GetPageHandler(), middlewares...)
 
-		if p.GetPostHandler != nil {
-			s.echo.POST(s.rootSitePath+p.Path, p.GetPostHandler, middlewares...)
+		if p.PostHandler != nil {
+			s.echo.POST(s.rootSitePath+p.Path, p.PostHandler, middlewares...)
 		}
 
-		if p.GetDeleteHandler != nil {
-			s.echo.DELETE(s.rootSitePath+p.Path, p.GetDeleteHandler, middlewares...)
+		if p.DeleteHandler != nil {
+			s.echo.DELETE(s.rootSitePath+p.Path, p.DeleteHandler, middlewares...)
 		}
 
-		if p.GetPutHandler != nil {
-			s.echo.PUT(s.rootSitePath+p.Path, p.GetPutHandler, middlewares...)
+		if p.PutHandler != nil {
+			s.echo.PUT(s.rootSitePath+p.Path, p.PutHandler, middlewares...)
 		}
 	}
 }

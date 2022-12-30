@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	sessionName     = "shadmin"
+	sessionName     = "go_ssr_template"
 	sessionLifeSpan = 216000 // 1 hour
 )
 
