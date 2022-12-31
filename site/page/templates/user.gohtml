@@ -4,8 +4,6 @@
 <div id="content"></div>
 
 <script>
-console.log("Hello world")
-
 fetch("/api/v1/user").then(res=>{
   res.json().then(body=>{
     console.log(body)
