@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go_ssr_template/api"
-	"go_ssr_template/session"
-	"go_ssr_template/site"
+	"{{.ModuleName}}/api"
+	"{{.ModuleName}}/session"
+	"{{.ModuleName}}/site"
 )
 
 func main() {
@@ -18,8 +18,7 @@ func main() {
 
 	sessionManager := session.New()
 
-  {{code}}
-
+{{.Code}}
 
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")
 	fmt.Print(string(data))

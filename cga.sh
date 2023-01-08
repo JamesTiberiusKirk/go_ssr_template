@@ -2,7 +2,7 @@
 
 # Create Go APP
 # BE CAREFUL USING THIS, IF U GIVE IT SOME WEIRD PATH IT MIGHT F*CK UP YOUR FILES
-# !!!!!!!!! PATH SAFETY IS NOT IMPLEMENTED !!!!!!!!
+# PATH SAFETY IS NOT IMPLEMENTED
 # ./cga.sh -n test_project -p ~/Projects -as
 # -n name of project
 # -p path for the new project
@@ -106,7 +106,7 @@ fi
 # fi
 
 cp ./main.go.template $PROJECT_PATH/main.go
-sed -i '' "s/{{code}}/$MAIN_GO_SED_STR/g" $PROJECT_PATH/main.go
+sed -i '' "s/{{.code}}/$MAIN_GO_SED_STR/g" $PROJECT_PATH/main.go
 
 
 cd $PROJECT_PATH

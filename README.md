@@ -36,10 +36,15 @@
 - [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
 - [ ] Add support for WASM inside pages
   - Maybe look at one of the WASM frameworks out there for go
-- [] Re-write the cga script so it actually works properly
+- [x] Re-write the cga script so it actually works properly
   - Seems to be very jank with it being just a shell script, maybe re-write it in go? 
   - Bugs probs still exist
   - No safety exists at the moment
     - Need to quit the script the moment there seems to be something wrong to avoid f*ing problems
 
-
+## CRA CLI TODOs:
+- [ ] Cleanup the vars section
+- [ ] Organise the functions to be bound to an instance of either the options struct or another struct which would hold the options
+  - [ ] Have a lot of the hard-coded global variables inside that function to make it more modular and to have a lot of that config organised in one place
+  - [ ] Donno if it makes sense but could even have that config being pulled from an env file...
+- [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
