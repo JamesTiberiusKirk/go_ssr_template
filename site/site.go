@@ -1,8 +1,8 @@
 package site
 
 import (
-	"go_ssr_template/session"
-	"go_ssr_template/site/page"
+	"go_web_template/session"
+	"go_web_template/site/page"
 	"html/template"
 
 	"github.com/foolin/goview"

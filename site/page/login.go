@@ -1,8 +1,8 @@
 package page
 
 import (
-	"go_ssr_template/models"
-	"go_ssr_template/session"
+	"go_web_template/models"
+	"go_web_template/session"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

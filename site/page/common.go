@@ -7,8 +7,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+const (
+	internalServerError = "Internal Server Error"
+	invalidData         = "Unable To Validate Data"
+)
+
 func redirect(c echo.Context, uri string, query map[string]string) error {
-	if len(query) > 0 {
+	if query != nil && len(query) > 0 {
 		withQuery := fmt.Sprintf("%s?", uri)
 
 		for k, v := range query {

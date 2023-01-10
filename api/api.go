@@ -1,8 +1,8 @@
 package api
 
 import (
-	"go_ssr_template/api/route"
-	"go_ssr_template/session"
+	"go_web_template/api/route"
+	"go_web_template/session"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"

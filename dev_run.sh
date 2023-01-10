@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export DEBUG=true
-export DB_NAME=postgres
+export DB_NAME=go_web_template
 export DB_HOST=localhost
 export DB_PORT=5432
 export DB_USER=postgres
@@ -11,4 +11,4 @@ export HTTP_ROOT_PATH=
 export HTTP_ROOT_API_PATH=/api/v1
 export SESSION_SECRET=super_secret
 
-reflex -d none -sr '.*\.(go|env)$' -- go run go_ssr_template
+reflex -d none -sr '.*\.(go|sh)$' -- go run go_web_template

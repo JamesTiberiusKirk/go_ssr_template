@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go_ssr_template/cli/cra"
+	"go_web_template/cli/cra"
 	"log"
 )
 

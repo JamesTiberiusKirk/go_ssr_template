@@ -1,4 +1,4 @@
-module go_ssr_template
+module go_web_template
 
 go 1.19
 
@@ -9,7 +9,6 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/labstack/echo-contrib v0.13.0
 	github.com/labstack/echo/v4 v4.7.2
-	github.com/opesun/copyrecur v0.0.0-20160628173408-c927f40d0726
 	github.com/rwtodd/Go.Sed v0.0.0-20210816025313-55464686f9ef
 	github.com/sirupsen/logrus v1.9.0
 	golang.org/x/crypto v0.4.0

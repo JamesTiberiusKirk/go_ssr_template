@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	sessionName     = "go_ssr_template"
+	sessionName     = "go_web_template"
 	sessionLifeSpan = 216000 // 1 hour
 )
 
