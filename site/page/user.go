@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	userPageUri = "/"
+	userPageUri = "/user"
 )
 
 type UserPage struct {
