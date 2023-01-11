@@ -25,8 +25,30 @@
 
     <script>
 
-      function form(inner, attribs){
-        return `<form ${attribs} >${inner}</form>`
+      let elems = {
+        H1: "h1",
+        H2: "h2",
+        H3: "h3",
+        H4: "h4",
+        H5: "h5",
+        H6: "h6",
+        H7: "h7",
+        DIV: "div",
+        P: "p",
+      
+      }
+
+
+      if (!String.prototype.format) {
+        String.prototype.format = function(...args) {
+          return this.replace(/(\{\d+\})/g, function(a) {
+            return args[+(a.substr(1, a.length - 2)) || 0];
+          });
+        };
+      }
+
+      function elem(elem, inner, attribs){
+        return '<{0} {1} >{2}</{0}>'.format(elem, attribs, inner)
       }
 
       let _data = {{.data}}
@@ -37,7 +59,7 @@
 
       contentDiv = document.getElementById("ssr_example")
       if (typeof(contentDiv) !== 'undefined' && typeof(render) !== 'undefined') {
-        render(contentDiv, _data)
+        contentDiv.innerHTML = render(contentDiv, _data)
       }
     </script>
   </body>

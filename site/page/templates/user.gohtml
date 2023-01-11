@@ -11,6 +11,7 @@
 <div>{{stringify .data.User}}</div>
 
 <script>
+
 // Anything you might want to do in a normal script
 fetch("/api/v1/user").then(res=>{
   res.json().then(body=>{
@@ -23,7 +24,7 @@ fetch("/api/v1/user").then(res=>{
 // Render function is called with the data passed to the function
 // This function is called at the end of a page load
 function render(dom, data){
-    dom.innerHTML = JSON.stringify(data)
+  return elem(elems.H1,"testing the elem func")
 }
 
 // Additionally we have _data and _meta variables available
