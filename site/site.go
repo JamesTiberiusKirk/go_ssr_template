@@ -34,12 +34,15 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
 			page.NewHomePage(),
 		},
 		authedPages: []*page.Page{
-			page.NewUserPage(db),
+			page.NewUserPage(db, sessionManager),
 		},
 		db:             db,
 		sessionManager: sessionManager,
 		echo:           e,
 		frameTmpl:      "frame",
+		tmplFuncs: template.FuncMap{
+			"stringify": stringyfyJson,
+		},
 	}
 }
 

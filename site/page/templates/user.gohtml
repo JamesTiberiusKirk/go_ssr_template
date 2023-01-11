@@ -1,16 +1,35 @@
 {{ define "content" }}
 <h1>{{.meta.Title}}</h1>
 
+<h1>Fetch example</h1>
 <div id="content"></div>
 
+<h1>SSR EXAMPLE (server rendering injecting data into js)</h1>
+<div id="ssr_example"></div>
+
+<h1>Server rendering EXAMPLE</h1>
+<div>{{stringify .data.User}}</div>
+
 <script>
+// Anything you might want to do in a normal script
 fetch("/api/v1/user").then(res=>{
   res.json().then(body=>{
     console.log(body)
     contentDiv = document.getElementById("content")
-    contentDiv.innerHTML = JSON.stringify( body)
+    contentDiv.innerHTML = JSON.stringify(body)
   })
 })
+
+// Render function is called with the data passed to the function
+// This function is called at the end of a page load
+function render(dom, data){
+    dom.innerHTML = JSON.stringify(data)
+}
+
+// Additionally we have _data and _meta variables available
+// console.log(_meta)
+// No we dont, the data is loaded in after this script
+
 </script>
 
 {{end}}

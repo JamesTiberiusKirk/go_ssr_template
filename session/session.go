@@ -2,6 +2,8 @@
 package session
 
 import (
+	"go_web_template/models"
+
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
@@ -58,8 +60,11 @@ func (m *Manager) IsAuthenticated(c echo.Context) bool {
 }
 
 // GetUser checks that a provided request is born from an active session.
-// As long as there is an active session, true is returned, else false.
-func (m *Manager) GetUser(c echo.Context) *sessions.Session {
+// As long as there is an active session, User is returned, else empty User
+func (m *Manager) GetUser(c echo.Context) models.User {
 	sess, _ := m.Jar.Get(c.Request(), sessionName)
-	return sess
+
+	return models.User{
+		Email: sess.Values["email"].(string),
+	}
 }
