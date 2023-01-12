@@ -1,7 +1,7 @@
 version: "3.5"
 
 services:
-  # go_ssr_template:
+  # go_web_template:
   #   build: 
   #     context: .
   #     dockerfile: ./Dockerfile.dev
@@ -27,6 +27,6 @@ services:
       environment:
         POSTGRES_USER: postgres 
         POSTGRES_PASSWORD: password 
-        POSTGRES_DB: go_ssr_template 
+        POSTGRES_DB: go_web_template 
       volumes:
         - ./db-mount:/var/lib/postgresql/data/

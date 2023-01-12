@@ -1,8 +1,8 @@
 package page
 
 import (
-	"go_ssr_template/models"
-	"go_ssr_template/session"
+	"go_web_template/models"
+	"go_web_template/session"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -79,5 +79,5 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 	}
 
 	p.sessionManager.InitSession(dbUser.Email, dbUser.ID, c)
-	return c.Redirect(http.StatusSeeOther, homePageUri)
+	return c.Redirect(http.StatusSeeOther, userPageUri)
 }

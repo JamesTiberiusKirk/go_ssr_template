@@ -71,7 +71,7 @@ var (
 	}
 )
 
-const sedTemplateNameCommand = "s/go_ssr_template/%s/g"
+const sedTemplateNameCommand = "s/go_web_template/%s/g"
 
 type CMD struct {
 	Key     string

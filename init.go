@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go_ssr_template/models"
-	"log"
+	"go_web_template/models"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -13,17 +12,17 @@ import (
 )
 
 func initDb(c Config) *gorm.DB {
-	log.Printf("%+v", c.Db)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=GMT",
 		c.Db.Host, c.Db.User, c.Db.Pass, c.Db.Name, c.Db.Port)
 	db, err := gorm.Open(postgres.Open(dsn), nil)
 	if err != nil {
-		logrus.
-			WithError(err).
-			Fatal("failed to init db")
+		logrus.WithError(err).Fatal("failed to init db")
 	}
 
-	db.AutoMigrate(models.GetAllModels()...)
+	err = db.AutoMigrate(models.GetAllModels()...)
+	if err != nil {
+		logrus.WithError(err).Fatal("unable to migrate db")
+	}
 
 	return db
 }

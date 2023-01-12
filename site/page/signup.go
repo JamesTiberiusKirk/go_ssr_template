@@ -2,10 +2,8 @@ package page
 
 import (
 	"fmt"
-	"go_ssr_template/models"
-	"go_ssr_template/session"
-	"log"
-	"net/http"
+	"go_web_template/models"
+	"go_web_template/session"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -75,44 +73,42 @@ func (p *SignupPage) PostHandler(c echo.Context) error {
 		RepeatPassword: c.FormValue("repeat_password"),
 	}
 
-	// TODO: use the redirect() function
-	// query := map[string]string{}
+	query := map[string]string{}
 
 	notPassed, err := user.Validate()
 	if err != nil {
 		logrus.
 			WithError(err).
 			Error("Error validating signup form")
-		return c.Redirect(http.StatusSeeOther, signupPageUri+"?error=internal server error")
+		query["error"] = internalServerError
+		return redirect(c, signupPageUri, query)
 	}
 
 	if user.Password != user.RepeatPassword {
 		notPassed = append(notPassed, "repeat_password")
 	}
 
-	log.Printf("%+v", notPassed)
-
 	if len(notPassed) > 0 {
-		query := "?error=Unable to validate data"
+		query["error"] = invalidData
 		for _, fields := range notPassed {
-			query = fmt.Sprintf("%s&%s=not valid", query, fields)
+			query[fields] = "not valid"
 		}
-		return c.Redirect(http.StatusSeeOther, signupPageUri+query)
+		return redirect(c, signupPageUri, query)
 	}
 
 	user.SetPassword(user.Password)
 
-	result := p.db.WithContext(c.Request().Context()).Create(&user)
+	result := p.db.WithContext(c.Request().Context()).Create(&user.User)
 	if result.Error != nil {
 		msg := "failed to insert user into db"
 		logrus.
 			WithError(result.Error).
 			Error(msg)
 
-		redirectURL := fmt.Sprintf("%s?error=Internal server error", signupPageUri)
-		c.Redirect(http.StatusSeeOther, redirectURL)
+		query["error"] = internalServerError
+		return redirect(c, signupPageUri, query)
 	}
 
 	p.sessionManager.InitSession(user.Email, user.ID, c)
-	return c.Redirect(http.StatusSeeOther, homePageUri)
+	return redirect(c, homePageUri, nil)
 }

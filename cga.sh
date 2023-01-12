@@ -71,7 +71,7 @@ echo "creating new project"
 echo $PROJECT_PATH
 
 echo Template:  Go SSR Docker
-SED_STR='s/go_ssr_template/'$PROJECT_NAME'/g'
+SED_STR='s/go_web_template/'$PROJECT_NAME'/g'
 mkdir $PROJECT_PATH
 
 echo Copying base template files
