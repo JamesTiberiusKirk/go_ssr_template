@@ -24,7 +24,8 @@
     </div>
 
     <script>
-
+  
+      // all the HTML elements listed for easier use with the elem() func
       let elems = {
         H1: "h1",
         H2: "h2",
@@ -35,10 +36,15 @@
         H7: "h7",
         DIV: "div",
         P: "p",
-      
+        A: "a",
+        FORM: "form",
+        INPUT: "input",
       }
 
-
+      // This is for adding .format() function on any string
+      // This pretty much is used as a printf function
+      // EXAMPLE USE: "Some test string {0} {1}".format("one var", "second var")
+      // OUTPUT: "Some test string one var second var"
       if (!String.prototype.format) {
         String.prototype.format = function(...args) {
           return this.replace(/(\{\d+\})/g, function(a) {
@@ -47,9 +53,42 @@
         };
       }
 
-      function elem(elem, inner, attribs){
-        return '<{0} {1} >{2}</{0}>'.format(elem, attribs, inner)
+      // elem - string - is the enum html element type
+      // inner - HTML element or string- is the inner complete html string element
+      // attribs - string - is a string of attributes to be used for the element
+      // style - map[string]string - is a map of strings which would be custom CSS styles
+      // returns HTML element - allowing for easier concatination of multiple of this function
+      function elem(elem, inner, options = {}){
+        const {atribs, style} = options
+
+        element = document.createElement(elem)
+
+        if (typeof(inner) === "string"){
+          element.innerText = inner
+        } else {
+          // Assuming that if its not a string it will be a HTML element
+          if (Array.isArray(inner)){
+            inner.forEach( child => {
+              element.appendChild(child)
+            })
+          } else {
+            element.appendChild(inner)
+          }
+        }
+
+        // if (typeof(atribs) !== 'undefined' ) element.attributes = atribs
+
+        // Have to do this bs to actually be able to assign the styles over
+        // Might have to do the same with the rest of the attribs
+        for (const key in style) {
+          if (style.hasOwnProperty(key)) {
+            element.style[key] = style[key]
+          }
+        }
+
+        return element
       }
+
 
       let _data = {{.data}}
       let _meta = {{.meta}}
@@ -59,8 +98,9 @@
 
       contentDiv = document.getElementById("ssr_example")
       if (typeof(contentDiv) !== 'undefined' && typeof(render) !== 'undefined') {
-        contentDiv.innerHTML = render(contentDiv, _data)
+        contentDiv.appendChild(render(contentDiv, _data))
       }
+
     </script>
   </body>
 </html>
