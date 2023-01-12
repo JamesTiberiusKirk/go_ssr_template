@@ -1,13 +1,6 @@
 # Create Go APP
 ## BE CAREFUL USING THIS, IF U GIVE IT SOME WEIRD PATH IT MIGHT F*CK UP YOUR FILES
-- !!!!!!!!! PATH SAFETY IS NOT IMPLEMENTED !!!!!!!!
-
-## Usage
-`./cga.sh -n test_project -p ~/Projects -as`  
-- `-n` name of project  
-- `-p` path for the new project  
-- `-a` for adding API boilerplate  
-- `-s` for adding SSR boilerplate
+- !!!!!!!!! LOCAL PATH SAFETY IS NOT IMPLEMENTED !!!!!!!!
 
 ## Featuring
 - Mostly out of your way extensible framework 
@@ -16,7 +9,7 @@
 - GORM with Postgres
 - Session authentication
 
-## TODOs:
+## Template TODOs:
 - [ ] Link all of the libraries in "featuring" section
 - [ ] Actually setup the rootSitePath
 - [ ] Setup a good way to serve static content such as libraries

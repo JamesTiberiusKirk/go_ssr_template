@@ -58,10 +58,15 @@ func NewProject(options Options) error {
 		mainConfig += fmt.Sprintf(configs[apiConfig])
 	}
 
+	err = os.Chmod(dest+"dev_run.sh", 0755)
+	if err != nil {
+		return err
+	}
+
 	log.Println("Creating main from template")
 	err = makeMainFileFromTemplate(options.TemplateDir, dest, mainConfig, options.GoProjectModuleName)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	if options.Vendoring {
@@ -75,7 +80,7 @@ func NewProject(options Options) error {
 	log.Println("Running go setup commands")
 	err = runGoSetupCommands(options.ProjectName, options.GoProjectModuleName, dest)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil
