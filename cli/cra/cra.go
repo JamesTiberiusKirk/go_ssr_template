@@ -8,7 +8,7 @@ import (
 	"text/template"
 )
 
-func NewProject(options Options) error {
+func (wt *WebTemplate) NewProject(options Options) error {
 	dest := fmt.Sprintf("%s/%s", options.ProjectParentDir, options.ProjectName)
 	log.Printf("Making new project directory %s", dest)
 	err := os.Mkdir(dest, 0755)
@@ -21,51 +21,51 @@ func NewProject(options Options) error {
 
 	escaped := strings.Replace(options.GoProjectModuleName, ".", "\\.", -1)
 	escaped = strings.Replace(escaped, "/", "\\/", -1)
-	sedCommand := fmt.Sprintf(sedTemplateNameCommand, escaped)
+	sedCommand := fmt.Sprintf(wt.sedTemplateNameCommand, escaped)
 
 	log.Println("Moving base files")
-	for baseFile, t := range baseFiles {
+	for baseFile, t := range wt.baseFiles {
 		filePath := fmt.Sprintf("%s/%s", options.TemplateDir, baseFile)
-		err := cp(filePath, dest+baseFile, sedCommand, t)
+		err := customCopy(filePath, dest+baseFile, sedCommand, t)
 		if err != nil {
 			return err
 		}
 	}
 
-	if options.Selections.SSR {
+	if options.Selections.Site {
 		log.Println("Moving Site files")
-		for ssrFile, t := range ssrFiles {
+		for ssrFile, t := range wt.siteFiles {
 			filePath := fmt.Sprintf("%s/%s", options.TemplateDir, ssrFile)
-			err := cp(filePath, dest+ssrFile, sedCommand, t)
+			err := customCopy(filePath, dest+ssrFile, sedCommand, t)
 			if err != nil {
 				return err
 			}
 		}
 
-		mainConfig += fmt.Sprintf(configs[siteConfig])
+		mainConfig += fmt.Sprintf(configs[mainSiteConfig])
 	}
 
 	if options.Selections.API {
 		log.Println("Moving API files")
-		for apiFile, t := range apiFiles {
+		for apiFile, t := range wt.apiFiles {
 			filePath := fmt.Sprintf("%s/%s", options.TemplateDir, apiFile)
-			err := cp(filePath, dest+apiFile, sedCommand, t)
+			err := customCopy(filePath, dest+apiFile, sedCommand, t)
 			if err != nil {
 				return err
 			}
 		}
 
-		mainConfig += fmt.Sprintf(configs[apiConfig])
+		mainConfig += fmt.Sprintf(configs[mainApiConfig])
 	}
 
 	log.Println("Creating main from template")
-	err = makeMainFileFromTemplate(options.TemplateDir, dest, mainConfig, options.GoProjectModuleName)
+	err = wt.makeMainFileFromTemplate(mainConfig)
 	if err != nil {
 		return nil
 	}
 
 	if options.Vendoring {
-		installCmds = append(installCmds, CMD{
+		wt.commands = append(wt.commands, CMD{
 			Key:     "vendoring",
 			Command: []string{"go", "mod", "vendor"},
 		})
@@ -81,17 +81,17 @@ func NewProject(options Options) error {
 	return nil
 }
 
-func makeMainFileFromTemplate(templatePath, projectPath, mainConig, moduleName string) error {
+func (wt *WebTemplate) makeMainFileFromTemplate(mainConfigCode string) error {
 	mainConfig := struct {
 		Code       string
 		ModuleName string
 	}{
-		Code:       mainConig,
-		ModuleName: moduleName,
+		Code:       mainConfigCode,
+		ModuleName: wt.options.GoProjectModuleName,
 	}
 
-	mainTPath := fmt.Sprintf("%s/%s", templatePath, mainGoTmpl)
-	mainDPath := fmt.Sprintf("%s/%s", projectPath, mainGo)
+	mainTPath := fmt.Sprintf("%s/%s", wt.options.TemplateDir, wt.mainGoTemplate)
+	mainDPath := fmt.Sprintf("%s/%s/%s", wt.options.ProjectParentDir, wt.options.ProjectName, wt.mainGo)
 
 	t, err := template.ParseFiles(mainTPath)
 	if err != nil {

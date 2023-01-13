@@ -23,20 +23,44 @@ fetch("/api/v1/user").then(res=>{
 
 // Render function is called with the data passed to the function
 // This function is called at the end of a page load
-function render(dom, data){
-  let style = {
+function render(data){
+  const style = {
     border: "red 10px solid",
   }
+
+  const atribs = {
+    id: "test-id",
+    style: {
+      border: "blue 50px solid",
+    }, 
+  }
+
+  let state = 0
+
+  const testDataElement = elem(
+    elems.H1,
+    state,
+    atribs,
+  )
+
+  const clickMeButton = elem(
+    elems.BUTTON, 
+    "CLICK ME",
+    {
+      onclick: (param)=>{
+        state++
+        innerTextById(testDataElement.id, state)
+      }
+    },
+  )
 
   return elem(
     elems.DIV, 
     elem(
       elems.DIV,
       [
-        elem(
-          elems.H1,
-          "TEST DATA"
-        ),
+        testDataElement,
+        clickMeButton,
         elem(
           elems.H1,
           "TEST DATA"
@@ -55,7 +79,6 @@ function render(dom, data){
       },
     ),
   )
-  // return elem(elems.P, "TEST")
 }
 
 // Additionally we have _data and _meta variables available

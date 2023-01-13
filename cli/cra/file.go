@@ -12,10 +12,15 @@ import (
 	"github.com/rwtodd/Go.Sed/sed"
 )
 
-func cp(source, dest, sedCmd string, t ItemType) error {
+func customCopy(source, dest, sedCmd string, t ItemType) error {
 	switch t {
 	case file:
 		err := copyFile(source, dest, sedCmd)
+		if err != nil {
+			return err
+		}
+	case templateFile:
+		err := copyTemplateFile(source, dest, nil)
 		if err != nil {
 			return err
 		}
@@ -29,6 +34,10 @@ func cp(source, dest, sedCmd string, t ItemType) error {
 		return nil
 	}
 
+	return nil
+}
+
+func copyTemplateFile(source, dest string, template any) error {
 	return nil
 }
 

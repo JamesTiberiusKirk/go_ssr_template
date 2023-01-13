@@ -26,7 +26,7 @@
     <script>
   
       // all the HTML elements listed for easier use with the elem() func
-      let elems = {
+      const elems = {
         H1: "h1",
         H2: "h2",
         H3: "h3",
@@ -39,8 +39,10 @@
         A: "a",
         FORM: "form",
         INPUT: "input",
+        BUTTON: "button",
       }
 
+      // TODO: probably needs to be removed as its not actually used
       // This is for adding .format() function on any string
       // This pretty much is used as a printf function
       // EXAMPLE USE: "Some test string {0} {1}".format("one var", "second var")
@@ -53,17 +55,35 @@
         };
       }
 
+      function assignOptionsToElem(options = {}, element){
+        for (const key in options) {
+          if (typeof options[key] === "object" && key in element) {
+            console.log("nested")
+            element[key] = assignOptionsToElem(options[key], element[key])
+          } else if (typeof options[key] === "string" && key in element) {
+            element[key] = options[key]
+          }
+        }
+
+        return element
+      }
+
+      function innerTextById(id, text){
+        const elem = document.getElementById(id)
+        elem.innerText = text
+      }
+
       // elem - string - is the enum html element type
       // inner - HTML element or string- is the inner complete html string element
-      // attribs - string - is a string of attributes to be used for the element
-      // style - map[string]string - is a map of strings which would be custom CSS styles
+      // attribs - object matching element.attributes - is a string of attributes to be used for the element
+      // style - object matching element.styles - is a map of strings which would be custom CSS styles
       // returns HTML element - allowing for easier concatination of multiple of this function
       function elem(elem, inner, options = {}){
         const {atribs, style} = options
 
         element = document.createElement(elem)
 
-        if (typeof(inner) === "string"){
+        if (typeof inner === "string" || typeof inner === "number"){
           element.innerText = inner
         } else {
           // Assuming that if its not a string it will be a HTML element
@@ -76,14 +96,20 @@
           }
         }
 
-        // if (typeof(atribs) !== 'undefined' ) element.attributes = atribs
+        // element = assignOptionsToElem(options, element)
+        // console.log(element)
 
         // Have to do this bs to actually be able to assign the styles over
         // Might have to do the same with the rest of the attribs
+        // This does not work for objects so needs to be manually done for no
         for (const key in style) {
-          if (style.hasOwnProperty(key)) {
-            element.style[key] = style[key]
-          }
+          element.style[key] = style[key]
+        }
+
+        // This does not work for nested objects
+        for (const key in options) {
+          if (typeof options[key] === "object") continue
+          element[key] = options[key]
         }
 
         return element
@@ -97,8 +123,9 @@
       console.log("META: ", _meta)
 
       contentDiv = document.getElementById("ssr_example")
-      if (typeof(contentDiv) !== 'undefined' && typeof(render) !== 'undefined') {
-        contentDiv.appendChild(render(contentDiv, _data))
+      if (typeof contentDiv !== 'undefined' && typeof render !== 'undefined') {
+        console.log(contentDiv)
+        contentDiv.appendChild(render(_data))
       }
 
     </script>

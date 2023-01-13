@@ -16,7 +16,13 @@ var (
 		Vendoring:           true,
 		Selections: cra.Selections{
 			API:  true,
-			SSR:  true,
+			Site: true,
+			SiteConfig: &cra.Site{
+				Templating: true,
+				SSR:        true,
+				Static:     false,
+				StaticSPA:  false,
+			},
 			Auth: cra.Session,
 		},
 	}
@@ -27,7 +33,8 @@ func main() {
 	fmt.Println("Running with example project configuration")
 	fmt.Println(string(bytes))
 
-	err := cra.NewProject(exampleOptions)
+	tp := cra.NewWebTemplate(exampleOptions)
+	err := tp.NewProject(exampleOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
