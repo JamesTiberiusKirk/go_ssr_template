@@ -78,7 +78,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 	}
 
 	log.Println("Running go setup commands")
-	err = runGoSetupCommands(options.ProjectName, options.GoProjectModuleName, dest)
+	err = wt.runGoSetupCommands(dest)
 	if err != nil {
 		return err
 	}
@@ -113,5 +113,24 @@ func (wt *WebTemplate) makeMainFileFromTemplate(mainConfigCode string) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (wt *WebTemplate) runGoSetupCommands(projectPath string) error {
+	for _, cmd := range wt.commands {
+		var err error
+		switch cmd.Key {
+		case "init":
+			err = runCMD(projectPath, append(cmd.Command, wt.options.GoProjectModuleName))
+		case "imports":
+			err = runCMD(projectPath, append(cmd.Command, wt.mainGo))
+		default:
+			err = runCMD(projectPath, cmd.Command)
+		}
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

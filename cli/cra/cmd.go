@@ -6,25 +6,6 @@ import (
 	"os/exec"
 )
 
-func runGoSetupCommands(name, moduleName, projectPath string) error {
-	for _, cmd := range installCmds {
-		var err error
-		switch cmd.Key {
-		case "init":
-			err = runCMD(projectPath, append(cmd.Command, moduleName))
-		case "imports":
-			err = runCMD(projectPath, append(cmd.Command, mainGo))
-		default:
-			err = runCMD(projectPath, cmd.Command)
-		}
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func runCMD(dir string, cmdStrings []string) error {
 	args := cmdStrings[1:]
 	cmd := exec.Command(cmdStrings[0], args...)

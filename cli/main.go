@@ -9,7 +9,8 @@ import (
 
 var (
 	exampleOptions = cra.Options{
-		ProjectParentDir:    "/Users/darthvader/Projects",
+		ProjectParentDir: "/home/darthvader/Projects",
+		// ProjectParentDir:    "/Users/darthvader/Projects",
 		TemplateDir:         ".",
 		ProjectName:         "test_project",
 		GoProjectModuleName: "example.com/me/test_project",

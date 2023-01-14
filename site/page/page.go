@@ -34,6 +34,7 @@ func (p *Page) GetPageHandler() echo.HandlerFunc {
 		err := c.Render(http.StatusOK, p.Template, echo.Map{
 			"data": p.GetPageData(c),
 			"meta": p.buildBasePageMetaData(c),
+			// "auth":
 		})
 
 		if err != nil {

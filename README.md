@@ -17,12 +17,10 @@
 - [ ] Maybe find an actual way to load up the .env file in the dev_run.sh
 - [x] Make some CLI or script for easy deployment of this Template
   - Not much needed other then copying the folder then using `sed -i` to replace the name to the desired one
-- [ ] Look more at making a dev container
-  - Maybe there's some easy way to make it portable across x86 and arm
 - [x] Standalone API handler framework (like site but without the renderer)
 - [x] Rethink the GetXMethod handler system
   - It adds too much boilerplate 
-- [ ] Maybe think of a way to hardcode in the path to be used outside each page for redirection
+- [x] Maybe think of a way to hardcode in the path to be used outside each page for redirection
   - Probably just consts 
 - [x] Add a menu system to frame and pages
   - [ ] Just need to actually create a menu in the templates 
@@ -34,6 +32,13 @@
   - Bugs probs still exist
   - No safety exists at the moment
     - Need to quit the script the moment there seems to be something wrong to avoid f*ing problems
+- [ ] Look at echoview partials for including files such as the SSR library and potentially even `.js/.css/.any` files in normal pages
+- [ ] EITHER replace echoview or re-write it myself, it's been a year since last commit and its missing some needed features
+  - Probably the best thing would be to implement it myself within my own site struct with complete support for stuff like:
+    - default 404s 
+    - options to exclude master frame per page 
+    - custom template file includes
+    - render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
 
 ## CRA CLI TODOs:
 - [ ] Cleanup the vars section

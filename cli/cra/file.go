@@ -15,17 +15,17 @@ import (
 func customCopy(source, dest, sedCmd string, t ItemType) error {
 	switch t {
 	case file:
-		err := copyFile(source, dest, sedCmd)
+		err := customCopyFile(source, dest, sedCmd)
 		if err != nil {
 			return err
 		}
 	case templateFile:
-		err := copyTemplateFile(source, dest, nil)
+		err := customCopyTemplateFile(source, dest, nil)
 		if err != nil {
 			return err
 		}
 	case dir:
-		err := copyDir(source, dest, sedCmd)
+		err := customCopyDir(source, dest, sedCmd)
 		if err != nil {
 			return err
 		}
@@ -37,11 +37,11 @@ func customCopy(source, dest, sedCmd string, t ItemType) error {
 	return nil
 }
 
-func copyTemplateFile(source, dest string, template any) error {
+func customCopyTemplateFile(source, dest string, template any) error {
 	return nil
 }
 
-func copyFile(source, dest, sedCmd string) error {
+func customCopyFile(source, dest, sedCmd string) error {
 	sourceFileStat, err := os.Stat(source)
 	if err != nil {
 		return err
@@ -91,7 +91,7 @@ func copyFile(source, dest, sedCmd string) error {
 	return nil
 }
 
-func copyDir(source, dest, sedCmd string) error {
+func customCopyDir(source, dest, sedCmd string) error {
 	sourceDirStat, err := os.Stat(source)
 	if err != nil {
 		return err
@@ -117,14 +117,14 @@ func copyDir(source, dest, sedCmd string) error {
 			sourceDir := path.Join(source, f.Name())
 			destDir := path.Join(dest, f.Name())
 
-			err = copyDir(sourceDir, destDir, sedCmd)
+			err = customCopyDir(sourceDir, destDir, sedCmd)
 			if err != nil {
 				return err
 			}
 		case false:
 			sourceFile := path.Join(source, f.Name())
 			destFile := path.Join(dest, f.Name())
-			err = copyFile(sourceFile, destFile, sedCmd)
+			err = customCopyFile(sourceFile, destFile, sedCmd)
 			if err != nil {
 				return err
 			}

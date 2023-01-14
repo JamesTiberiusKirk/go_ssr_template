@@ -35,6 +35,7 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
 		},
 		authedPages: []*page.Page{
 			page.NewUserPage(db, sessionManager),
+			page.NewUserSSRPage(db, sessionManager),
 		},
 		db:             db,
 		sessionManager: sessionManager,
