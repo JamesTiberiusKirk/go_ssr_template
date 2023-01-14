@@ -32,7 +32,7 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 		MenuID:      "login-page",
 		Title:       "Login",
 		Path:        loginPageUri,
-		Template:    "login",
+		Template:    "login.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
 		PostHandler: deps.PostHandler,

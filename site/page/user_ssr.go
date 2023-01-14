@@ -32,7 +32,7 @@ func NewUserSSRPage(db *gorm.DB, session *session.Manager) *Page {
 		MenuID:      "user-page",
 		Title:       "User Page",
 		Path:        userSsrPageUri,
-		Template:    "user_ssr_example",
+		Template:    "user_ssr_example.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
 	}

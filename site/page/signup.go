@@ -38,7 +38,7 @@ func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 		MenuID:      "signup-page",
 		Title:       "Signup",
 		Path:        "/signup",
-		Template:    "signup",
+		Template:    "signup.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
 		PostHandler: deps.PostHandler,

@@ -4,86 +4,19 @@
 <h1>Fetch example</h1>
 <div id="content"></div>
 
-<h1>SSR EXAMPLE (server rendering injecting data into js)</h1>
-<div id="ssr_example"></div>
-
 <h1>Server rendering EXAMPLE</h1>
 <div>{{stringify .data.User}}</div>
 
 <script>
-
+  
 // Anything you might want to do in a normal script
-fetch("/api/v1/user").then(res=>{
+fetch("/api/v1/users").then(res=>{
   res.json().then(body=>{
     console.log(body)
     contentDiv = document.getElementById("content")
     contentDiv.innerHTML = JSON.stringify(body)
   })
 })
-
-// Render function is called with the data passed to the function
-// This function is called at the end of a page load
-function render(data){
-  const style = {
-    border: "red 10px solid",
-  }
-
-  const atribs = {
-    id: "test-id",
-    style: {
-      border: "blue 50px solid",
-    }, 
-  }
-
-  let state = 0
-
-  const testDataElement = elem(
-    elems.H1,
-    state,
-    atribs,
-  )
-
-  const clickMeButton = elem(
-    elems.BUTTON, 
-    "CLICK ME",
-    {
-      onclick: (param)=>{
-        state++
-        innerTextById(testDataElement.id, state)
-      }
-    },
-  )
-
-  return elem(
-    elems.DIV, 
-    elem(
-      elems.DIV,
-      [
-        testDataElement,
-        clickMeButton,
-        elem(
-          elems.H1,
-          "TEST DATA"
-        ),
-        elem(
-          elems.H1,
-          "TEST DATA"
-        ),
-        elem(
-          elems.H1,
-          "TEST DATA"
-        ),
-      ],
-      {
-        style: style,
-      },
-    ),
-  )
-}
-
-// Additionally we have _data and _meta variables available
-// console.log(_meta)
-// No we dont, the data is loaded in after this script
 
 </script>
 

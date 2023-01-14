@@ -124,8 +124,10 @@
 
       contentDiv = document.getElementById("ssr_example")
       if (typeof contentDiv !== 'undefined' && typeof render !== 'undefined') {
-        console.log(contentDiv)
-        contentDiv.appendChild(render(_data))
+        // console.log(contentDiv)
+        let toRender = render(_data)
+        console.dir(toRender)
+        contentDiv.appendChild(toRender)
       }
 
     </script>
