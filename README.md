@@ -5,7 +5,8 @@
 ## Featuring
 - Mostly out of your way extensible framework 
 - Echo framework 
-- Goview to help with templating
+- (Goview)[https://github.com/foolin/goview] to help with templating
+  - Although now I've had to pretty much fork goview and modify it to suit my needs
 - GORM with Postgres
 - Session authentication
 
