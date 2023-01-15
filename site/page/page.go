@@ -19,6 +19,7 @@ type PageMetaData struct {
 type Page struct {
 	MenuID        string
 	Title         string
+	Frame         bool
 	Path          string
 	Template      string
 	Deps          interface{}
@@ -28,9 +29,29 @@ type Page struct {
 	PutHandler    echo.HandlerFunc
 }
 
+// ContextParams is for the context passed to the controllers
+type ContextParams struct {
+	UseFrame bool
+}
+
+const (
+	UseFrameName = "frame"
+)
+
+func createContext(frame bool) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Set(UseFrameName, ContextParams{UseFrame: frame})
+			return next(c)
+		}
+	}
+}
+
 // GetPageHandler is a get handler which uses the echo Render function
 func (p *Page) GetPageHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		c.Set(UseFrameName, p.Frame)
+
 		err := c.Render(http.StatusOK, p.Template, echo.Map{
 			"data": p.GetPageData(c),
 			"meta": p.buildBasePageMetaData(c),

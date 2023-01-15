@@ -20,6 +20,7 @@ func NewHomePage() *Page {
 	return &Page{
 		MenuID:      "home-page",
 		Title:       "Home Page",
+		Frame:       false,
 		Path:        homePageUri,
 		Template:    "homepage/homepage.gohtml",
 		Deps:        deps,

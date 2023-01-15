@@ -1,10 +1,12 @@
 package echow
 
 import (
+	"go_web_template/site/page"
 	"go_web_template/site/renderer"
 	"io"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
 const templateEngineKey = "foolin-goview-echoview"
@@ -33,7 +35,9 @@ func Default() *ViewEngine {
 
 // Render render template for echo interface
 func (e *ViewEngine) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return e.RenderWriter(w, name, data)
+	frame := c.Get(page.UseFrameName).(bool)
+	logrus.Print("FRAME:", frame)
+	return e.RenderWriter(w, name, data, frame)
 }
 
 // Render html render for template

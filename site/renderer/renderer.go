@@ -68,22 +68,22 @@ func Default() *ViewEngine {
 }
 
 // Render render template with http.ResponseWriter
-func (e *ViewEngine) Render(w http.ResponseWriter, statusCode int, name string, data interface{}) error {
+func (e *ViewEngine) Render(w http.ResponseWriter, statusCode int, name string, data interface{}, useMaster bool) error {
 	header := w.Header()
 	if val := header["Content-Type"]; len(val) == 0 {
 		header["Content-Type"] = HTMLContentType
 	}
 	w.WriteHeader(statusCode)
-	return e.executeRender(w, name, data)
+	return e.executeRender(w, name, data, useMaster)
 }
 
 // RenderWriter render template with io.Writer
-func (e *ViewEngine) RenderWriter(w io.Writer, name string, data interface{}) error {
-	return e.executeRender(w, name, data)
+func (e *ViewEngine) RenderWriter(w io.Writer, name string, data interface{}, useMaster bool) error {
+	return e.executeRender(w, name, data, useMaster)
 }
 
-func (e *ViewEngine) executeRender(out io.Writer, name string, data interface{}) error {
-	useMaster := true
+func (e *ViewEngine) executeRender(out io.Writer, name string, data interface{}, useMaster bool) error {
+	// useMaster := true
 	return e.executeTemplate(out, name, data, useMaster)
 }
 
