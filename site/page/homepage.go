@@ -21,7 +21,7 @@ func NewHomePage() *Page {
 		MenuID:      "home-page",
 		Title:       "Home Page",
 		Path:        homePageUri,
-		Template:    "homepage.gohtml",
+		Template:    "homepage/homepage.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
 	}

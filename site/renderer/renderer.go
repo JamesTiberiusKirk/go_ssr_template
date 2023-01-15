@@ -17,8 +17,7 @@ var HTMLContentType = []string{"text/html; charset=utf-8"}
 
 // DefaultConfig default config
 var DefaultConfig = Config{
-	Root: "views",
-	// Extension:    ".html",
+	Root:         "views",
 	Master:       "layouts/master",
 	Partials:     []string{},
 	Funcs:        make(template.FuncMap),
@@ -95,11 +94,17 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 
 	allFuncs := make(template.FuncMap, 0)
 
-	// TODO: need to see if I can extract this so it can have includes per page
-	allFuncs["include"] = func(layout string) (template.HTML, error) {
+	allFuncs["include"] = func(tmpl string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
-		err := e.executeTemplate(buf, layout, data, false)
+		err := e.executeTemplate(buf, tmpl, data, false)
 		return template.HTML(buf.String()), err
+	}
+
+	allFuncs["includeJs"] = func(tmpl string) (template.HTML, error) {
+		buf := new(bytes.Buffer)
+		err := e.executeTemplate(buf, tmpl, data, false)
+		js := template.JS(buf.String())
+		return template.HTML("\n<script>\n" + js + "\n</script>\n"), err
 	}
 
 	// Get the plugin collection
@@ -129,21 +134,21 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 
 		// Loop through each template and test the full path
 		tpl = template.New(name).Funcs(allFuncs).Delims(e.config.Delims.Left, e.config.Delims.Right)
-		for _, v := range tplList {
+		for _, t := range tplList {
 			var data string
-			data, err = e.fileHandler(e.config, v)
+			data, err = e.fileHandler(e.config, t)
 			if err != nil {
 				return err
 			}
 			var tmpl *template.Template
-			if v == name {
+			if t == name {
 				tmpl = tpl
 			} else {
-				tmpl = tpl.New(v)
+				tmpl = tpl.New(t)
 			}
 			_, err = tmpl.Parse(data)
 			if err != nil {
-				return fmt.Errorf("ViewEngine render parser name:%v, error: %v", v, err)
+				return fmt.Errorf("ViewEngine render parser name:%v, error: %v", t, err)
 			}
 		}
 		e.tplMutex.Lock()
@@ -164,6 +169,7 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 type FileHandler func(config Config, tplFile string) (content string, err error)
 
 // defaultFileHandler new default file handler
+// This is just supposed to read the file and return a string as content
 func defaultFileHandler() FileHandler {
 	return func(config Config, tplFile string) (content string, err error) {
 		// Get the absolute path of the root template

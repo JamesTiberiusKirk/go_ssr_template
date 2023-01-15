@@ -36,10 +36,10 @@
 - [ ] Look at echoview partials for including files such as the SSR library and potentially even `.js/.css/.any` files in normal pages
 - [ ] EITHER replace echoview or re-write it myself, it's been a year since last commit and its missing some needed features
   - Probably the best thing would be to implement it myself within my own site struct with complete support for stuff like:
-    - default 404s 
-    - options to exclude master frame per page 
-    - custom template file includes
-    - render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
+    - [ ] default 404s 
+    - [ ] options to exclude master frame per page 
+    - [x] custom template file includes
+    - [ ] render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
 
 ## CRA CLI TODOs:
 - [ ] Cleanup the vars section

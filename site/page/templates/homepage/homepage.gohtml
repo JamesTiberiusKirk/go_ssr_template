@@ -1,7 +1,9 @@
 {{ define "content" }}
 
 <h1>Hello world</h1>
+<div id="ssr_example"></div>
 {{.meta.Title}}
 
+{{ includeJs "js/test_include.js"}}
 
 {{end}}
