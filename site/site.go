@@ -3,10 +3,10 @@ package site
 import (
 	"go_web_template/session"
 	"go_web_template/site/page"
+	"go_web_template/site/renderer"
+	"go_web_template/site/renderer/echow"
 	"html/template"
 
-	"github.com/foolin/goview"
-	"github.com/foolin/goview/supports/echoview-v4"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -40,7 +40,7 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
 		db:             db,
 		sessionManager: sessionManager,
 		echo:           e,
-		frameTmpl:      "frame",
+		frameTmpl:      "frame.gohtml",
 		tmplFuncs: template.FuncMap{
 			"stringify": stringyfyJson,
 		},
@@ -56,9 +56,9 @@ func (s *Site) Serve() {
 }
 
 func (s *Site) buildRenderer() {
-	s.echo.Renderer = echoview.New(goview.Config{
-		Root:         "site/page/templates",
-		Extension:    ".gohtml",
+	s.echo.Renderer = echow.New(renderer.Config{
+		Root: "site/page/templates",
+		// Extension:    ".gohtml",
 		Master:       s.frameTmpl,
 		Funcs:        s.tmplFuncs,
 		DisableCache: true,

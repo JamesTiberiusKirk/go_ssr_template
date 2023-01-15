@@ -79,5 +79,5 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 	}
 
 	p.sessionManager.InitSession(dbUser.Email, dbUser.ID, c)
-	return c.Redirect(http.StatusSeeOther, userPageUri)
+	return c.Redirect(http.StatusSeeOther, userSsrPageUri)
 }

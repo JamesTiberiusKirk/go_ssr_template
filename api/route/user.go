@@ -10,7 +10,7 @@ import (
 
 const (
 	userApiRoute  = "/:email"
-	usersApiRoute = "/user"
+	usersApiRoute = "/users"
 )
 
 // UserRoute user route dependency struct
