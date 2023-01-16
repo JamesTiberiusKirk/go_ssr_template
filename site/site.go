@@ -4,7 +4,6 @@ import (
 	"go_web_template/session"
 	"go_web_template/site/page"
 	"go_web_template/site/renderer"
-	"go_web_template/site/renderer/echow"
 	"html/template"
 
 	"github.com/labstack/echo/v4"
@@ -19,8 +18,11 @@ type Site struct {
 	db             *gorm.DB
 	sessionManager *session.Manager
 	echo           *echo.Echo
-	frameTmpl      string
+	frameTmpls     map[string]string
 	tmplFuncs      template.FuncMap
+	renderOpts     struct {
+		disableCache bool
+	}
 }
 
 // NewSite init Site
@@ -40,7 +42,10 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
 		db:             db,
 		sessionManager: sessionManager,
 		echo:           e,
-		frameTmpl:      "frame.gohtml",
+		frameTmpls: map[string]string{
+			"frame":    "frame.gohtml",
+			"no_frame": "no_frame.gohtml",
+		},
 		tmplFuncs: template.FuncMap{
 			"stringify": stringyfyJson,
 		},
@@ -56,10 +61,10 @@ func (s *Site) Serve() {
 }
 
 func (s *Site) buildRenderer() {
-	s.echo.Renderer = echow.New(renderer.Config{
-		Root: "site/page/templates",
-		// Extension:    ".gohtml",
-		Master:       s.frameTmpl,
+	s.echo.Renderer = renderer.New(renderer.Config{
+		Root:         "site/page/templates",
+		Master:       s.frameTmpls["frame"],
+		NoFrame:      s.frameTmpls["no_frame"],
 		Funcs:        s.tmplFuncs,
 		DisableCache: true,
 	})

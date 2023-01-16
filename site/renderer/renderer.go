@@ -3,14 +3,25 @@ package renderer
 import (
 	"bytes"
 	"fmt"
+	"go_web_template/site/page"
 	"html/template"
 	"io"
 	"io/ioutil"
-	"net/http"
+	"log"
 	"os"
 	"path/filepath"
 	"sync"
+
+	"github.com/labstack/echo/v4"
 )
+
+const (
+	Master   TemplateType = "usesMaster"
+	NoMaster TemplateType = "noMaster"
+	Include  TemplateType = "include"
+)
+
+type TemplateType string
 
 // HTMLContentType const templateEngineKey = "httpx_templateEngine"
 var HTMLContentType = []string{"text/html; charset=utf-8"}
@@ -37,6 +48,7 @@ type ViewEngine struct {
 type Config struct {
 	Root         string           //view root
 	Master       string           //template master
+	NoFrame      string           //template master
 	Partials     []string         //template partial, such as head, foot
 	Funcs        template.FuncMap //template functions
 	DisableCache bool             //disable cache, debug mode
@@ -67,27 +79,25 @@ func Default() *ViewEngine {
 	return New(DefaultConfig)
 }
 
-// Render render template with http.ResponseWriter
-func (e *ViewEngine) Render(w http.ResponseWriter, statusCode int, name string, data interface{}, useMaster bool) error {
-	header := w.Header()
-	if val := header["Content-Type"]; len(val) == 0 {
-		header["Content-Type"] = HTMLContentType
-	}
-	w.WriteHeader(statusCode)
-	return e.executeRender(w, name, data, useMaster)
+// Render render template for echo interface
+func (e *ViewEngine) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	frame := c.Get(page.UseFrameName).(bool)
+	return e.RenderWriter(w, name, data, frame)
 }
 
 // RenderWriter render template with io.Writer
 func (e *ViewEngine) RenderWriter(w io.Writer, name string, data interface{}, useMaster bool) error {
-	return e.executeRender(w, name, data, useMaster)
+	frame := Master
+	if useMaster {
+		frame = Master
+	} else {
+		frame = NoMaster
+	}
+
+	return e.executeTemplate(w, name, data, frame)
 }
 
-func (e *ViewEngine) executeRender(out io.Writer, name string, data interface{}, useMaster bool) error {
-	// useMaster := true
-	return e.executeTemplate(out, name, data, useMaster)
-}
-
-func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{}, useMaster bool) error {
+func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{}, frame TemplateType) error {
 	var tpl *template.Template
 	var err error
 	var ok bool
@@ -96,13 +106,13 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 
 	allFuncs["include"] = func(tmpl string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
-		err := e.executeTemplate(buf, tmpl, data, false)
+		err := e.executeTemplate(buf, tmpl, data, Include)
 		return template.HTML(buf.String()), err
 	}
 
 	allFuncs["includeJs"] = func(tmpl string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
-		err := e.executeTemplate(buf, tmpl, data, false)
+		err := e.executeTemplate(buf, tmpl, data, Include)
 		js := template.JS(buf.String())
 		return template.HTML("\n<script>\n" + js + "\n</script>\n"), err
 	}
@@ -117,20 +127,28 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 	e.tplMutex.RUnlock()
 
 	exeName := name
-	if useMaster && e.config.Master != "" {
+	if frame == Master && e.config.Master != "" {
 		exeName = e.config.Master
+	} else if frame == NoMaster && e.config.NoFrame != "" {
+		exeName = e.config.NoFrame
 	}
 
 	if !ok || e.config.DisableCache {
 		tplList := make([]string, 0)
-		if useMaster {
-			//render()
+		if frame == Master {
 			if e.config.Master != "" {
 				tplList = append(tplList, e.config.Master)
 			}
+		} else if frame == NoMaster {
+			if e.config.NoFrame != "" {
+				tplList = append(tplList, e.config.NoFrame)
+			}
 		}
+
 		tplList = append(tplList, name)
 		tplList = append(tplList, e.config.Partials...)
+
+		log.Print(tplList)
 
 		// Loop through each template and test the full path
 		tpl = template.New(name).Funcs(allFuncs).Delims(e.config.Delims.Left, e.config.Delims.Right)
@@ -151,9 +169,11 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 				return fmt.Errorf("ViewEngine render parser name:%v, error: %v", t, err)
 			}
 		}
-		e.tplMutex.Lock()
+
+		// TODO: need to figure out why this is here...
+		// e.tplMutex.Lock()
 		e.tplMap[name] = tpl
-		e.tplMutex.Unlock()
+		// e.tplMutex.Unlock()
 	}
 
 	// Display the content to the screen
