@@ -31,6 +31,7 @@ func NewUserSSRPage(db *gorm.DB, session *session.Manager) *Page {
 	return &Page{
 		MenuID:      "user-page",
 		Title:       "User Page",
+		Frame:       true,
 		Path:        userSsrPageUri,
 		Template:    "user_ssr_example.gohtml",
 		Deps:        deps,
@@ -39,7 +40,14 @@ func NewUserSSRPage(db *gorm.DB, session *session.Manager) *Page {
 }
 
 func (p *UserSSRPage) GetPageData(c echo.Context) any {
-	user := p.session.GetUser(c)
+	user, err := p.session.GetUser(c)
+	if err != nil {
+		query := map[string]string{
+			"error": internalServerError,
+		}
+		redirect(c, loginPageUri, query)
+		return err
+	}
 
 	dbUser := &models.User{}
 	result := p.db.Where(&models.User{Email: user.Email}).Find(dbUser)

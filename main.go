@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go_web_template/api"
+	"go_web_template/server"
 	"go_web_template/session"
 	"go_web_template/site"
 )
@@ -18,12 +19,22 @@ func main() {
 
 	sessionManager := session.New()
 
-	s := site.NewSite(config.Http.RootPath, db, sessionManager, e)
-	s.Serve()
+	routes := server.RoutesMap{}
 
-	a := api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
-		sessionManager)
-	a.Serve()
+	servers := []server.Server{
+		api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
+			sessionManager),
+		site.NewSite(e, config.Http.RootSitePath, db, sessionManager),
+	}
+
+	for _, s := range servers {
+		key := s.GetRoutesType()
+		routes[key] = s.GetRoutes()[key]
+	}
+
+	for _, s := range servers {
+		s.Serve(routes)
+	}
 
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")
 	fmt.Print(string(data))

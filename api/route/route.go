@@ -1,9 +1,14 @@
 package route
 
-import "github.com/labstack/echo/v4"
+import (
+	"go_web_template/server"
+
+	"github.com/labstack/echo/v4"
+)
 
 type Route struct {
 	SubRoute      *Route
+	RouteID       string
 	Path          string
 	Depts         any
 	GetHandler    echo.HandlerFunc
@@ -12,7 +17,7 @@ type Route struct {
 	PutHandler    echo.HandlerFunc
 }
 
-func (r *Route) Init(rootPath string, e *echo.Group, middlewares ...echo.MiddlewareFunc) {
+func (r *Route) Init(rootPath string, e *echo.Group, middlewares ...echo.MiddlewareFunc) server.RoutesMap {
 	if r.GetHandler != nil {
 		e.GET(rootPath+r.Path, r.GetHandler, middlewares...)
 	}
@@ -29,7 +34,11 @@ func (r *Route) Init(rootPath string, e *echo.Group, middlewares ...echo.Middlew
 		e.PUT(rootPath+r.Path, r.PutHandler, middlewares...)
 	}
 
+	routes := server.RoutesMap{r.RouteID: r.Path}
+
 	if r.SubRoute != nil {
 		r.SubRoute.Init(r.Path, e, middlewares...)
 	}
+
+	return routes
 }

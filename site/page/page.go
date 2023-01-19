@@ -1,6 +1,8 @@
 package page
 
 import (
+	"go_web_template/server"
+	"go_web_template/session"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -48,14 +50,30 @@ func createContext(frame bool) echo.MiddlewareFunc {
 }
 
 // GetPageHandler is a get handler which uses the echo Render function
-func (p *Page) GetPageHandler() echo.HandlerFunc {
+func (p *Page) GetPageHandler(session session.Manager, routesMap server.RoutesMap) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		c.Set(UseFrameName, p.Frame)
+		auth := echo.Map{}
+		user, err := session.GetUser(c)
+		if err != nil {
+			if err.Error() == "securecookie: the value is not valid" {
+				auth = echo.Map{}
+			} else {
+				return err
+			}
+		}
 
-		err := c.Render(http.StatusOK, p.Template, echo.Map{
-			"data": p.GetPageData(c),
-			"meta": p.buildBasePageMetaData(c),
-			// "auth":
+		auth = echo.Map{
+			"email":    user.Email,
+			"username": user.Username,
+		}
+
+		err = c.Render(http.StatusOK, p.Template, echo.Map{
+			"data":   p.GetPageData(c),
+			"meta":   p.buildBasePageMetaData(c),
+			"auth":   auth,
+			"routes": routesMap,
+			// "auth":   user,
 		})
 
 		if err != nil {

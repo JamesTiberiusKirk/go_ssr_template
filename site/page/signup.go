@@ -37,6 +37,7 @@ func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	return &Page{
 		MenuID:      "signup-page",
 		Title:       "Signup",
+		Frame:       true,
 		Path:        "/signup",
 		Template:    "signup.gohtml",
 		Deps:        deps,
@@ -109,6 +110,6 @@ func (p *SignupPage) PostHandler(c echo.Context) error {
 		return redirect(c, signupPageUri, query)
 	}
 
-	p.sessionManager.InitSession(user.Email, user.ID, c)
+	p.sessionManager.InitSession(user.User, c)
 	return redirect(c, homePageUri, nil)
 }

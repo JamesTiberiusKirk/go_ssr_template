@@ -30,7 +30,7 @@ func New() *Manager {
 }
 
 // InitSession will store a new session or refresh an existing one.
-func (m *Manager) InitSession(email string, id uint, c echo.Context) {
+func (m *Manager) InitSession(user models.User, c echo.Context) {
 	sess, _ := m.Jar.Get(c.Request(), sessionName)
 
 	sess.Options = &sessions.Options{
@@ -39,8 +39,8 @@ func (m *Manager) InitSession(email string, id uint, c echo.Context) {
 		HttpOnly: true,
 	}
 
-	sess.Values["email"] = email
-	sess.Values["id"] = id
+	sess.Values["email"] = user.Email
+	sess.Values["username"] = user.Username
 	sess.Save(c.Request(), c.Response())
 }
 
@@ -61,10 +61,18 @@ func (m *Manager) IsAuthenticated(c echo.Context) bool {
 
 // GetUser checks that a provided request is born from an active session.
 // As long as there is an active session, User is returned, else empty User
-func (m *Manager) GetUser(c echo.Context) models.User {
-	sess, _ := m.Jar.Get(c.Request(), sessionName)
+func (m *Manager) GetUser(c echo.Context) (models.User, error) {
+	sess, err := m.Jar.Get(c.Request(), sessionName)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	if sess.Values == nil {
+		return models.User{}, nil
+	}
 
 	return models.User{
-		Email: sess.Values["email"].(string),
-	}
+		Email:    sess.Values["email"].(string),
+		Username: sess.Values["username"].(string),
+	}, nil
 }

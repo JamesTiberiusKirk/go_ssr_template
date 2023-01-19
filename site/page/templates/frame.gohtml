@@ -11,13 +11,15 @@
     </style>
   </head>
   <body>
-
-    <!-- making data accessible in js -->
-    <script>
-    </script>
-
     <h1>Go SSR Boilerplate</h1>
-    PAGE: {{ .meta.MenuID }}
+    <h1>PAGE: {{ .meta.MenuID }}</h1>
+
+    {{if .auth.username }}
+      <h1>USER: {{.auth.username}}</h1>
+    {{end}}
+
+
+    <a href={{.routes.login-page}}>Login</a>
 
     <div id="page_content">
       {{template "content" .}}

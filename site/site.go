@@ -1,6 +1,7 @@
 package site
 
 import (
+	"go_web_template/server"
 	"go_web_template/session"
 	"go_web_template/site/page"
 	"go_web_template/site/renderer"
@@ -8,6 +9,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
+)
+
+const (
+	siteRouteName = "site"
 )
 
 // Site site struct with config and dependencies
@@ -20,15 +25,13 @@ type Site struct {
 	echo           *echo.Echo
 	frameTmpls     map[string]string
 	tmplFuncs      template.FuncMap
-	renderOpts     struct {
-		disableCache bool
-	}
+	routes         server.RoutesMap
 }
 
 // NewSite init Site
-func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
-	e *echo.Echo) Site {
-	return Site{
+func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
+	sessionManager *session.Manager) *Site {
+	return &Site{
 		rootSitePath: rootSitePath,
 		publicPages: []*page.Page{
 			page.NewLoginPage(db, sessionManager),
@@ -53,11 +56,21 @@ func NewSite(rootSitePath string, db *gorm.DB, sessionManager *session.Manager,
 }
 
 // Serve to start the server
-func (s *Site) Serve() {
+func (s *Site) Serve(existingRoutes server.RoutesMap) {
+	s.routes = existingRoutes
+
 	s.buildRenderer()
 
 	s.mapPages(&s.publicPages)
 	s.mapPages(&s.authedPages, session.SessionAuthMiddleware(s.sessionManager))
+}
+
+func (s *Site) GetRoutes() server.RoutesMap {
+	return s.routes
+}
+
+func (s *Site) GetRoutesType() string {
+	return siteRouteName
 }
 
 func (s *Site) buildRenderer() {
@@ -72,18 +85,21 @@ func (s *Site) buildRenderer() {
 
 func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {
 	for _, p := range *pages {
-		s.echo.GET(s.rootSitePath+p.Path, p.GetPageHandler(), middlewares...)
+		route := s.rootSitePath + p.Path
+		s.echo.GET(route, p.GetPageHandler(*s.sessionManager, s.routes), middlewares...)
 
 		if p.PostHandler != nil {
-			s.echo.POST(s.rootSitePath+p.Path, p.PostHandler, middlewares...)
+			s.echo.POST(route, p.PostHandler, middlewares...)
 		}
 
 		if p.DeleteHandler != nil {
-			s.echo.DELETE(s.rootSitePath+p.Path, p.DeleteHandler, middlewares...)
+			s.echo.DELETE(route, p.DeleteHandler, middlewares...)
 		}
 
 		if p.PutHandler != nil {
-			s.echo.PUT(s.rootSitePath+p.Path, p.PutHandler, middlewares...)
+			s.echo.PUT(route, p.PutHandler, middlewares...)
 		}
+
+		s.routes[p.MenuID] = route
 	}
 }

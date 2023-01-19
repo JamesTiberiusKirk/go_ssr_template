@@ -31,6 +31,7 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	return &Page{
 		MenuID:      "login-page",
 		Title:       "Login",
+		Frame:       true,
 		Path:        loginPageUri,
 		Template:    "login.gohtml",
 		Deps:        deps,
@@ -61,7 +62,6 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 			Error("error getting user from the database")
 		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=internal server problem")
 	}
-
 	if dbUser.Password == "" {
 		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=wrong user name or password")
 	}
@@ -78,6 +78,6 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=wrong user name or password")
 	}
 
-	p.sessionManager.InitSession(dbUser.Email, dbUser.ID, c)
+	p.sessionManager.InitSession(*dbUser, c)
 	return c.Redirect(http.StatusSeeOther, userSsrPageUri)
 }
