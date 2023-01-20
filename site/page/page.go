@@ -1,6 +1,7 @@
 package page
 
 import (
+	"fmt"
 	"go_web_template/server"
 	"go_web_template/session"
 	"net/http"
@@ -68,12 +69,13 @@ func (p *Page) GetPageHandler(session session.Manager, routesMap server.RoutesMa
 			"username": user.Username,
 		}
 
+		fmt.Printf("%+v\n", routesMap)
+
 		err = c.Render(http.StatusOK, p.Template, echo.Map{
 			"data":   p.GetPageData(c),
 			"meta":   p.buildBasePageMetaData(c),
 			"auth":   auth,
 			"routes": routesMap,
-			// "auth":   user,
 		})
 
 		if err != nil {

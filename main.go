@@ -19,8 +19,6 @@ func main() {
 
 	sessionManager := session.New()
 
-	routes := server.RoutesMap{}
-
 	servers := []server.Server{
 		api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
 			sessionManager),
@@ -28,12 +26,7 @@ func main() {
 	}
 
 	for _, s := range servers {
-		key := s.GetRoutesType()
-		routes[key] = s.GetRoutes()[key]
-	}
-
-	for _, s := range servers {
-		s.Serve(routes)
+		s.Serve()
 	}
 
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")

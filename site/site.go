@@ -11,10 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-const (
-	siteRouteName = "site"
-)
-
 // Site site struct with config and dependencies
 type Site struct {
 	rootSitePath   string
@@ -52,25 +48,16 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 		tmplFuncs: template.FuncMap{
 			"stringify": stringyfyJson,
 		},
+		routes: map[string]string{},
 	}
 }
 
 // Serve to start the server
-func (s *Site) Serve(existingRoutes server.RoutesMap) {
-	s.routes = existingRoutes
-
+func (s *Site) Serve() {
 	s.buildRenderer()
 
 	s.mapPages(&s.publicPages)
 	s.mapPages(&s.authedPages, session.SessionAuthMiddleware(s.sessionManager))
-}
-
-func (s *Site) GetRoutes() server.RoutesMap {
-	return s.routes
-}
-
-func (s *Site) GetRoutesType() string {
-	return siteRouteName
 }
 
 func (s *Site) buildRenderer() {
@@ -86,6 +73,11 @@ func (s *Site) buildRenderer() {
 func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {
 	for _, p := range *pages {
 		route := s.rootSitePath + p.Path
+		s.routes[p.MenuID] = route
+	}
+
+	for _, p := range *pages {
+		route := s.rootSitePath + p.Path
 		s.echo.GET(route, p.GetPageHandler(*s.sessionManager, s.routes), middlewares...)
 
 		if p.PostHandler != nil {
@@ -99,7 +91,5 @@ func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc)
 		if p.PutHandler != nil {
 			s.echo.PUT(route, p.PutHandler, middlewares...)
 		}
-
-		s.routes[p.MenuID] = route
 	}
 }

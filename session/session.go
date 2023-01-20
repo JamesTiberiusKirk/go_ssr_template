@@ -2,6 +2,7 @@
 package session
 
 import (
+	"errors"
 	"go_web_template/models"
 
 	"github.com/gorilla/securecookie"
@@ -59,6 +60,10 @@ func (m *Manager) IsAuthenticated(c echo.Context) bool {
 	return sess.Values["email"] != nil
 }
 
+var (
+	errNotLoggedIn = errors.New("no login")
+)
+
 // GetUser checks that a provided request is born from an active session.
 // As long as there is an active session, User is returned, else empty User
 func (m *Manager) GetUser(c echo.Context) (models.User, error) {
@@ -71,8 +76,18 @@ func (m *Manager) GetUser(c echo.Context) (models.User, error) {
 		return models.User{}, nil
 	}
 
+	email, ok := sess.Values["email"]
+	if !ok {
+		return models.User{}, nil
+	}
+
+	username, ok := sess.Values["username"]
+	if !ok {
+		return models.User{}, nil
+	}
+
 	return models.User{
-		Email:    sess.Values["email"].(string),
-		Username: sess.Values["username"].(string),
+		Email:    email.(string),
+		Username: username.(string),
 	}, nil
 }

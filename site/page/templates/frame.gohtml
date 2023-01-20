@@ -19,7 +19,13 @@
     {{end}}
 
 
-    <a href={{.routes.login-page}}>Login</a>
+    <a href={{index .routes "home-page"}}>Home</a>
+    <a href={{index .routes "login-page"}}>Login</a>
+
+    {{if .auth.username }}
+      <a href={{index .routes "user-page"}}>User</a>
+      <a href={{index .routes "user-ssr-page"}}>UserSSR</a>
+    {{end}}
 
     <div id="page_content">
       {{template "content" .}}

@@ -33,7 +33,7 @@ func NewUserPage(db *gorm.DB, session *session.Manager) *Page {
 		Title:       "User Page",
 		Frame:       true,
 		Path:        userPageUri,
-		Template:    "user.gohtml",
+		Template:    "user/user.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
 	}

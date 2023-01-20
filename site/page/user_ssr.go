@@ -29,7 +29,7 @@ func NewUserSSRPage(db *gorm.DB, session *session.Manager) *Page {
 	}
 
 	return &Page{
-		MenuID:      "user-page",
+		MenuID:      "user-ssr-page",
 		Title:       "User Page",
 		Frame:       true,
 		Path:        userSsrPageUri,

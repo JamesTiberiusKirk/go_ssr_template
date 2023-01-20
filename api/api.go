@@ -2,15 +2,10 @@ package api
 
 import (
 	"go_web_template/api/route"
-	"go_web_template/server"
 	"go_web_template/session"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
-)
-
-const (
-	apiRoutesName = "api"
 )
 
 // Api api struct
@@ -21,7 +16,6 @@ type Api struct {
 	echoGroup      *echo.Group
 	db             *gorm.DB
 	sessionManager *session.Manager
-	routes         server.RoutesMap
 }
 
 // NewApi new api instance
@@ -39,18 +33,8 @@ func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
 	}
 }
 
-func (a *Api) GetRoutes() server.RoutesMap {
-	return a.routes
-}
-
-func (a *Api) GetRoutesType() string {
-	return apiRoutesName
-}
-
 // Serve api
-func (a *Api) Serve(existingRoutes server.RoutesMap) {
-	a.routes = existingRoutes
-
+func (a *Api) Serve() {
 	a.mapRoutes(&a.publicRoutes)
 	a.mapRoutes(&a.authedRoutes, session.SessionAuthMiddleware(a.sessionManager))
 }
