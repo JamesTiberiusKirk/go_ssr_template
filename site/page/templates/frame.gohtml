@@ -19,18 +19,23 @@
     {{end}}
 
 
-    <a href={{index .routes "home-page"}}>Home</a>
-    <a href={{index .routes "login-page"}}>Login</a>
+    <a href={{index .routes.site "home-page"}}>Home</a>
+    <a href={{index .routes.site "login-page"}}>Login</a>
 
     {{if .auth.username }}
-      <a href={{index .routes "user-page"}}>User</a>
-      <a href={{index .routes "user-ssr-page"}}>UserSSR</a>
+      <a href={{index .routes.site "user-page"}}>User</a>
+      <a href={{index .routes.site "user-ssr-page"}}>UserSSR</a>
     {{end}}
+
+    {{index .routes.api "user"}}
+
+    {{ include "framework/framework.gohtml" }}
 
     <div id="page_content">
       {{template "content" .}}
     </div>
   
-    {{ include "framework/framework.gohtml" }}
+
+    {{ includeJs "framework/framework.js" }}
   </body>
 </html>

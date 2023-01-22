@@ -3,6 +3,7 @@
 
 <h1>Fetch example</h1>
 <div id="content"></div>
+<div id="content2"></div>
 
 <h1>Server rendering EXAMPLE</h1>
 <div>{{stringify .data.User}}</div>
@@ -10,10 +11,21 @@
 <script>
   
 // Anything you might want to do in a normal script
-fetch("/api/v1/users").then(res=>{
+fetch(_routes.api.users).then(res=>{
+// fetch("/api/v1/users").then(res=>{
   res.json().then(body=>{
     console.log(body)
     contentDiv = document.getElementById("content")
+    contentDiv.innerHTML = JSON.stringify(body)
+  })
+})
+
+// Anything you might want to do in a normal script
+fetch(_routes.api.user.replace(':email', _auth.email)).then(res=>{
+// fetch("/api/v1/users").then(res=>{
+  res.json().then(body=>{
+    console.log(body)
+    contentDiv = document.getElementById("content2")
     contentDiv.innerHTML = JSON.stringify(body)
   })
 })

@@ -21,7 +21,7 @@ type Site struct {
 	echo           *echo.Echo
 	frameTmpls     map[string]string
 	tmplFuncs      template.FuncMap
-	routes         server.RoutesMap
+	routes         map[string]server.RoutesMap
 }
 
 // NewSite init Site
@@ -48,7 +48,9 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 		tmplFuncs: template.FuncMap{
 			"stringify": stringyfyJson,
 		},
-		routes: map[string]string{},
+		routes: map[string]server.RoutesMap{
+			"site": {},
+		},
 	}
 }
 
@@ -58,6 +60,16 @@ func (s *Site) Serve() {
 
 	s.mapPages(&s.publicPages)
 	s.mapPages(&s.authedPages, session.SessionAuthMiddleware(s.sessionManager))
+}
+
+// GetRoutes to get routes which have been made in the server
+func (s *Site) GetRoutes() server.RoutesMap {
+	return s.routes["site"]
+}
+
+// SetRoutes which would be used in the templating engine
+func (s *Site) SetRoutes(t string, r server.RoutesMap) {
+	s.routes[t] = r
 }
 
 func (s *Site) buildRenderer() {
@@ -73,7 +85,7 @@ func (s *Site) buildRenderer() {
 func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {
 	for _, p := range *pages {
 		route := s.rootSitePath + p.Path
-		s.routes[p.MenuID] = route
+		s.routes["site"][p.MenuID] = route
 	}
 
 	for _, p := range *pages {

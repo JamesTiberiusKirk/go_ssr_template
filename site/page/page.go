@@ -51,7 +51,7 @@ func createContext(frame bool) echo.MiddlewareFunc {
 }
 
 // GetPageHandler is a get handler which uses the echo Render function
-func (p *Page) GetPageHandler(session session.Manager, routesMap server.RoutesMap) echo.HandlerFunc {
+func (p *Page) GetPageHandler(session session.Manager, routesMap map[string]server.RoutesMap) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		c.Set(UseFrameName, p.Frame)
 		auth := echo.Map{}
