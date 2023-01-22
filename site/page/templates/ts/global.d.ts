@@ -1,7 +1,8 @@
 export { }
 
 declare global {
-  enum Elems {
+  // TODO: need to see if there is a way to not doubly define this enum
+  enum html {
     H1 = "h1",
     H2 = "h2",
     H3 = "h3",
@@ -36,13 +37,17 @@ declare global {
     username?: string
   }
 
+  interface ElemOptions{
+
+  }
+
   let _data: Data
   let _auth: Auth
   let _meta: Meta
   let _rotues: Routes
 
   // function renderFunc(_data:Data): HTMLElement
-  function elem(elem: Elems, inner: HTMLElement | string | number, options: object): HTMLElement
+  function elem(elem: html, inner: HTMLElement | string | number, options?: ElemOptions): HTMLElement
   function innerTextById(id: string, text: string): void
 }
 

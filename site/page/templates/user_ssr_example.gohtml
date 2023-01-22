@@ -23,13 +23,13 @@ function render(data){
   let state = 0
 
   const testDataElement = elem(
-    elems.H1,
+    html.H1,
     state,
     atribs,
   )
 
   const clickMeButton = elem(
-    elems.BUTTON, 
+    html.BUTTON, 
     "CLICK ME",
     {
       onclick: (param)=>{
@@ -40,22 +40,22 @@ function render(data){
   )
 
   return elem(
-    elems.DIV, 
+    html.DIV, 
     elem(
-      elems.DIV,
+      html.DIV,
       [
         testDataElement,
         clickMeButton,
         elem(
-          elems.H1,
+          html.H1,
           "TEST DATA"
         ),
         elem(
-          elems.H1,
+          html.H1,
           "TEST DATA"
         ),
         elem(
-          elems.H1,
+          html.H1,
           "TEST DATA"
         ),
       ],

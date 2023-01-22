@@ -1,8 +1,8 @@
 function render() {
   return elem(
-    elems.DIV,
+    html.DIV,
     elem(
-      elems.H1,
+      html.H1,
       "H1 FROM JS",
     ),
     {

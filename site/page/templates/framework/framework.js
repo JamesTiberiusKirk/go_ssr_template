@@ -1,6 +1,6 @@
 
 // all the HTML elements listed for easier use with the elem() func
-const elems = {
+const html = {
   H1: "h1",
   H2: "h2",
   H3: "h3",

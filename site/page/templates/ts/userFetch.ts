@@ -1,3 +1,8 @@
 function render(_data: Data) {
-  return elem(Elems.H1, "THIS IS HELLO WORLD FROM TYPESCRIPT",{})
+  return elem(html.DIV, 
+    elem(
+      html.H2,
+      "TEST this is being rendered by typescript",
+    ),
+  )
 }
