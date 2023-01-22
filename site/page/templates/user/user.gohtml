@@ -8,6 +8,9 @@
 <h1>Server rendering EXAMPLE</h1>
 <div>{{stringify .data.User}}</div>
 
+<h1>ts EXAMPLE</h1>
+<div id="ssr_example"></div>
+
 <script>
   
 // Anything you might want to do in a normal script
@@ -31,5 +34,7 @@ fetch(_routes.api.user.replace(':email', _auth.email)).then(res=>{
 })
 
 </script>
+
+{{includeJs "jsdist/userFetch.js"}}
 
 {{end}}
