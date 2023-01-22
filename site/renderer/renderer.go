@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"sync"
@@ -147,8 +146,6 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 
 		tplList = append(tplList, name)
 		tplList = append(tplList, e.config.Partials...)
-
-		log.Print(tplList)
 
 		// Loop through each template and test the full path
 		tpl = template.New(name).Funcs(allFuncs).Delims(e.config.Delims.Left, e.config.Delims.Right)

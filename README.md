@@ -28,18 +28,12 @@
 - [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
 - [ ] Add support for WASM inside pages
   - Maybe look at one of the WASM frameworks out there for go
-- [x] Re-write the cga script so it actually works properly
-  - Seems to be very jank with it being just a shell script, maybe re-write it in go? 
-  - Bugs probs still exist
-  - No safety exists at the moment
-    - Need to quit the script the moment there seems to be something wrong to avoid f*ing problems
-- [ ] Look at echoview partials for including files such as the SSR library and potentially even `.js/.css/.any` files in normal pages
-- [ ] EITHER replace echoview or re-write it myself, it's been a year since last commit and its missing some needed features
+- [x] EITHER replace echoview or re-write it myself, it's been a year since last commit and its missing some needed features
   - Probably the best thing would be to implement it myself within my own site struct with complete support for stuff like:
     - [ ] default 404s 
-    - [ ] options to exclude master frame per page 
+    - [x] options to exclude master frame per page 
     - [x] custom template file includes
-    - [ ] render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
+    - [x] render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
 
 ## CRA CLI TODOs:
 - [ ] Cleanup the vars section
@@ -47,3 +41,9 @@
   - [ ] Have a lot of the hard-coded global variables inside that function to make it more modular and to have a lot of that config organised in one place
   - [ ] Donno if it makes sense but could even have that config being pulled from an env file...
 - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
+
+
+# For getting the dev script to run 
+```sh 
+go install github.com/cespare/reflex@latest
+```

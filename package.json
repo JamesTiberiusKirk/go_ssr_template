@@ -1,0 +1,23 @@
+{
+  "name": "go_web_template",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesTiberiusKirk/go_web_template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JamesTiberiusKirk/go_web_template/issues"
+  },
+  "homepage": "https://github.com/JamesTiberiusKirk/go_web_template#readme",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
+}
