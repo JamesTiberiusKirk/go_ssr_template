@@ -18,8 +18,9 @@ type UserPage struct {
 	session *session.Manager
 }
 
+// TsType
 type UserPageData struct {
-	User models.User
+	User models.User `json:"user"`
 }
 
 func NewUserPage(db *gorm.DB, session *session.Manager) *Page {

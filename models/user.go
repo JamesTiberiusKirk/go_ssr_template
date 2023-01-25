@@ -21,9 +21,9 @@ var (
 
 type User struct {
 	gorm.Model
-	Email    string `gorm:"UNIQUE;NOT NULL"`
-	Username string
-	Password string
+	Email    string `gorm:"UNIQUE;NOT NULL" json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // SetPassword will accept a string password and attempt to hash and salt it. Providing the

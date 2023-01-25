@@ -6,5 +6,8 @@
     "sourceMap": false, 
     "outDir": "site/page/templates/jsdist",
   },
-  "include": ["site/page/templates/ts/**/*"],
+  "include": [
+    "site/page/templates/ts/**/*",
+    "site/page/templates/tstypes/**/*",
+  ],
 }

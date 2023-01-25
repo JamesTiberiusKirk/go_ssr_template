@@ -18,15 +18,15 @@ func main() {
 
 	sessionManager := session.New()
 
-	api := api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
+	apiServer := api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
 		sessionManager)
-	site := site.NewSite(e, config.Http.RootSitePath, db, sessionManager)
+	siteServer := site.NewSite(e, config.Http.RootSitePath, db, sessionManager)
 
-	api.Serve()
-	apiRoutes := api.GetRoutes()
+	apiServer.Serve()
+	apiRoutes := apiServer.GetRoutes()
 
-	site.SetRoutes("api", apiRoutes)
-	site.Serve()
+	siteServer.SetRoutes("api", apiRoutes)
+	siteServer.Serve()
 
 	data, _ := json.MarshalIndent(e.Routes(), "", "  ")
 	fmt.Print(string(data))

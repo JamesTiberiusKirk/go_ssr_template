@@ -38,7 +38,7 @@ declare global {
   }
 
   interface ElemOptions{
-
+    style: CSSStyleDeclaration
   }
 
   let _data: Data
@@ -46,7 +46,7 @@ declare global {
   let _meta: Meta
   let _rotues: Routes
 
-  // function renderFunc(_data:Data): HTMLElement
+  function render(_data:any): HTMLElement
   function elem(elem: html, inner: HTMLElement | string | number, options?: ElemOptions): HTMLElement
   function innerTextById(id: string, text: string): void
 }

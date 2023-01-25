@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/labstack/echo/v4"
@@ -116,6 +117,14 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 		return template.HTML("\n<script>\n" + js + "\n</script>\n"), err
 	}
 
+	allFuncs["includeTs"] = func(tmpl string) (template.HTML, error) {
+		buf := new(bytes.Buffer)
+		path := "jsdist/" + strings.Replace(tmpl, ".ts", ".js", 1)
+		err := e.executeTemplate(buf, path, data, Include)
+		js := template.JS(buf.String())
+		return template.HTML("\n<script>\n" + js + "\n</script>\n"), err
+	}
+
 	// Get the plugin collection
 	for k, v := range e.config.Funcs {
 		allFuncs[k] = v
@@ -167,10 +176,9 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 			}
 		}
 
-		// TODO: need to figure out why this is here...
-		// e.tplMutex.Lock()
+		e.tplMutex.Lock()
 		e.tplMap[name] = tpl
-		// e.tplMutex.Unlock()
+		e.tplMutex.Unlock()
 	}
 
 	// Display the content to the screen

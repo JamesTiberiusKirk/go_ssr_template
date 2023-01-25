@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d
-	github.com/foolin/goview v0.3.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
 	github.com/labstack/echo-contrib v0.13.0
@@ -32,6 +31,7 @@ require (
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/tkrajina/go-reflector v0.5.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	golang.org/x/net v0.3.0 // indirect

@@ -1,6 +1,4 @@
 # Create Go APP
-## BE CAREFUL USING THIS, IF U GIVE IT SOME WEIRD PATH IT MIGHT F*CK UP YOUR FILES
-- !!!!!!!!! LOCAL PATH SAFETY IS NOT IMPLEMENTED !!!!!!!!
 
 ## Featuring
 - Mostly out of your way extensible framework 
@@ -9,6 +7,19 @@
   - Although now I've had to pretty much fork goview and modify it to suit my needs
 - GORM with Postgres
 - Session authentication
+- (Reflex)[github.com/cespare/reflex] for hotloading
+- (tygo)[github.com/gzuidhof/tygo] for Typescript type generation from go structs
+
+# ROADMAP
+## V0.1.0
+- Version 1 will be about having all the bells and whistles that anyone might ever want
+- If the user does not want some of those features, they can just remove them manually 
+
+### TODOs:
+- [ ] Link all of the libraries in "featuring" section
+- [ ] Actually setup the rootSitePath
+- [ ] Setup a good way to serve static content such as libraries
+- [ ] Setup a 404 default re-routing
 
 ## Template TODOs:
 - [ ] Link all of the libraries in "featuring" section
@@ -34,6 +45,11 @@
     - [x] options to exclude master frame per page 
     - [x] custom template file includes
     - [x] render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
+- [x] Add typescript support to the js proto framework
+  - [x] Go struct transpiration to typescript
+  - [x] Typescript typings for the proto framework 
+  - [ ] Try to implement the base framework functions in TS
+  - [ ] Get rid of lint/lsp warning for unused declarations in TS
 
 ## CRA CLI TODOs:
 - [ ] Cleanup the vars section
@@ -46,4 +62,17 @@
 # For getting the dev script to run 
 ```sh 
 go install github.com/cespare/reflex@latest
+go install github.com/JamesTiberiusKirk/tygo@v0.2.5
 ```
+
+
+
+
+
+
+
+
+
+
+
+item name, price, marketplace, trx_data json
