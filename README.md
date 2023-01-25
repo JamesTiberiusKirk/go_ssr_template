@@ -20,6 +20,10 @@
 - [ ] Actually setup the rootSitePath
 - [ ] Setup a good way to serve static content such as libraries
 - [ ] Setup a 404 default re-routing
+- [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
+  - With support for letting ht spa use its own router
+- [ ] Finish a basic version of the cli
+- [ ] Package up the cli
 
 ## Template TODOs:
 - [ ] Link all of the libraries in "featuring" section
