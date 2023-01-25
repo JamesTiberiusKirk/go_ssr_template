@@ -4,11 +4,11 @@
 - Mostly out of your way extensible framework 
 - Echo framework 
 - (Goview)[https://github.com/foolin/goview] to help with templating
-  - Although now I've had to pretty much fork goview and modify it to suit my needs
+  - Forked a basic version of it in this repo
 - GORM with Postgres
 - Session authentication
 - (Reflex)[github.com/cespare/reflex] for hotloading
-- (tygo)[github.com/gzuidhof/tygo] for Typescript type generation from go structs
+- Forked (tygo)[github.com/gzuidhof/tygo] and added a few features for Typescript type generation from go structs
 
 # ROADMAP
 ## V0.1.0
@@ -68,15 +68,3 @@
 go install github.com/cespare/reflex@latest
 go install github.com/JamesTiberiusKirk/tygo@v0.2.5
 ```
-
-
-
-
-
-
-
-
-
-
-
-item name, price, marketplace, trx_data json
