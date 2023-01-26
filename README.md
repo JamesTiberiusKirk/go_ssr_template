@@ -18,7 +18,7 @@
 ### TODOs:
 - [x] Link all of the libraries in "featuring" section
 - [x] Actually setup the rootSitePath
-- [ ] Setup a good way to serve static content such as libraries
+- [x] Setup a good way to serve static content such as libraries
 - [x] Setup a 404 default re-routing
 - [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
   - With support for letting the spa use its own router
@@ -26,6 +26,16 @@
 - [ ] Package up the cli
 - [ ] Figure out how to remove the exports from js dist
 - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
+
+## V0.2.0
+- This will be about expanding on the feature set
+
+### TODOs:
+- [ ] Add support for web sockets
+- [ ] Abstract the db behind a struct so the client can more easily swapped out
+- [ ] Add an internal server failure page
+- [ ] Add support for WASM inside pages
+  - Maybe look at one of the WASM frameworks out there for go
 
 ## Template TODOs:
 - [x] Link all of the libraries in "featuring" section
@@ -41,11 +51,10 @@
 - [x] Maybe think of a way to hardcode in the path to be used outside each page for redirection
   - Probably just consts 
 - [x] Add a menu system to frame and pages
-  - [ ] Just need to actually create a menu in the templates 
 - [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
 - [ ] Add support for WASM inside pages
-- [ ] Add support fro web sockets
   - Maybe look at one of the WASM frameworks out there for go
+- [ ] Add support for web sockets
 - [x] EITHER replace echoview or re-write it myself, it's been a year since last commit and its missing some needed features
   - Probably the best thing would be to implement it myself within my own site struct with complete support for stuff like:
     - [x] default 404s 

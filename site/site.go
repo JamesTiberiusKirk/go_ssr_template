@@ -18,6 +18,7 @@ type Site struct {
 	publicPages    []*page.Page
 	authedPages    []*page.Page
 	notFoundPage   *page.Page
+	staticFolders  map[string]string
 	db             *gorm.DB
 	sessionManager *session.Manager
 	echo           *echo.Echo
@@ -39,6 +40,10 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 		authedPages: []*page.Page{
 			page.NewUserPage(db, sessionManager),
 			page.NewUserSSRPage(db, sessionManager),
+		},
+		staticFolders: map[string]string{
+			"/static": "site/static/",
+			"/assets": "site/assets/",
 		},
 		notFoundPage:   page.NewNotFoundPage(),
 		db:             db,
@@ -67,6 +72,8 @@ func (s *Site) Serve() {
 	// Mapping 404 page
 	s.echo.GET(s.rootSitePath+s.notFoundPage.Path,
 		s.notFoundPage.GetPageHandler(http.StatusNotFound, *s.sessionManager, s.routes))
+
+	s.mapStatic()
 }
 
 // GetRoutes to get routes which have been made in the server
@@ -87,6 +94,13 @@ func (s *Site) buildRenderer() {
 		Funcs:        s.tmplFuncs,
 		DisableCache: true,
 	})
+}
+
+func (s *Site) mapStatic() {
+	for k, v := range s.staticFolders {
+		s.echo.Static(k, v)
+
+	}
 }
 
 func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {

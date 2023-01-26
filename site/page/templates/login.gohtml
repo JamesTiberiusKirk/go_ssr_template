@@ -1,15 +1,15 @@
 {{ define "content" }}
 
 <h1>Login Page</h1>
-{{if .meta.UrlError}}
+{{ if .meta.UrlError }}
   <h1>ERROR</h1>
-  <h1>{{.meta.UrlError}}</h1>
-{{end}}
+  <h1>{{ .meta.UrlError }}</h1>
+{{ end }}
 
-{{if .meta.Success}}
+{{ if .meta.Success }}
   <h1>SUCCESS</h1>
-  <h1>{{.meta.Success}}</h1>
-{{end}}
+  <h1>{{ .meta.Success }}</h1>
+{{ end }}
 <form method="POST">
   <label for="email">Email:</label><br>
   <input type="text" id="email" name="email"><br/>
@@ -20,4 +20,4 @@
 
 <a href="/signup">Create Account</a>
 
-{{end}}
+{{ end }}
