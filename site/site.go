@@ -6,6 +6,7 @@ import (
 	"go_web_template/site/page"
 	"go_web_template/site/renderer"
 	"html/template"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -16,6 +17,7 @@ type Site struct {
 	rootSitePath   string
 	publicPages    []*page.Page
 	authedPages    []*page.Page
+	notFoundPage   *page.Page
 	db             *gorm.DB
 	sessionManager *session.Manager
 	echo           *echo.Echo
@@ -38,6 +40,7 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 			page.NewUserPage(db, sessionManager),
 			page.NewUserSSRPage(db, sessionManager),
 		},
+		notFoundPage:   page.NewNotFoundPage(),
 		db:             db,
 		sessionManager: sessionManager,
 		echo:           e,
@@ -60,6 +63,10 @@ func (s *Site) Serve() {
 
 	s.mapPages(&s.publicPages)
 	s.mapPages(&s.authedPages, session.SessionAuthMiddleware(s.sessionManager))
+
+	// Mapping 404 page
+	s.echo.GET(s.rootSitePath+s.notFoundPage.Path,
+		s.notFoundPage.GetPageHandler(http.StatusNotFound, *s.sessionManager, s.routes))
 }
 
 // GetRoutes to get routes which have been made in the server
@@ -90,7 +97,7 @@ func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc)
 
 	for _, p := range *pages {
 		route := s.rootSitePath + p.Path
-		s.echo.GET(route, p.GetPageHandler(*s.sessionManager, s.routes), middlewares...)
+		s.echo.GET(route, p.GetPageHandler(http.StatusOK, *s.sessionManager, s.routes), middlewares...)
 
 		if p.PostHandler != nil {
 			s.echo.POST(route, p.PostHandler, middlewares...)

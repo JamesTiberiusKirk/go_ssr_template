@@ -1,10 +1,8 @@
 package page
 
 import (
-	"fmt"
 	"go_web_template/server"
 	"go_web_template/session"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
@@ -51,7 +49,7 @@ func createContext(frame bool) echo.MiddlewareFunc {
 }
 
 // GetPageHandler is a get handler which uses the echo Render function
-func (p *Page) GetPageHandler(session session.Manager, routesMap map[string]server.RoutesMap) echo.HandlerFunc {
+func (p *Page) GetPageHandler(httpStatus int, session session.Manager, routesMap map[string]server.RoutesMap) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		c.Set(UseFrameName, p.Frame)
 		auth := echo.Map{}
@@ -62,22 +60,25 @@ func (p *Page) GetPageHandler(session session.Manager, routesMap map[string]serv
 			} else {
 				return err
 			}
+		} else {
+			auth = echo.Map{
+				"email":    user.Email,
+				"username": user.Username,
+			}
 		}
 
-		auth = echo.Map{
-			"email":    user.Email,
-			"username": user.Username,
-		}
-
-		fmt.Printf("%+v\n", routesMap)
-
-		err = c.Render(http.StatusOK, p.Template, echo.Map{
-			"data":   p.GetPageData(c),
+		echoData := echo.Map{
 			"meta":   p.buildBasePageMetaData(c),
 			"auth":   auth,
 			"routes": routesMap,
-		})
+		}
 
+		pageData := p.GetPageData(c)
+		if pageData != nil {
+			echoData["data"] = pageData
+		}
+
+		err = c.Render(httpStatus, p.Template, echoData)
 		if err != nil {
 			return err
 		}

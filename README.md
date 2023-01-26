@@ -19,11 +19,12 @@
 - [x] Link all of the libraries in "featuring" section
 - [x] Actually setup the rootSitePath
 - [ ] Setup a good way to serve static content such as libraries
-- [ ] Setup a 404 default re-routing
+- [x] Setup a 404 default re-routing
 - [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
-  - With support for letting ht spa use its own router
+  - With support for letting the spa use its own router
 - [ ] Finish a basic version of the cli
 - [ ] Package up the cli
+- [ ] Figure out how to remove the exports from js dist
 
 ## Template TODOs:
 - [ ] Link all of the libraries in "featuring" section
@@ -42,10 +43,11 @@
   - [ ] Just need to actually create a menu in the templates 
 - [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
 - [ ] Add support for WASM inside pages
+- [ ] Add support fro web sockets
   - Maybe look at one of the WASM frameworks out there for go
 - [x] EITHER replace echoview or re-write it myself, it's been a year since last commit and its missing some needed features
   - Probably the best thing would be to implement it myself within my own site struct with complete support for stuff like:
-    - [ ] default 404s 
+    - [x] default 404s 
     - [x] options to exclude master frame per page 
     - [x] custom template file includes
     - [x] render function for the frame (so that base data can be included such as authed user, altho might still be better done in the GetPageHandler function instead)
@@ -54,6 +56,8 @@
   - [x] Typescript typings for the proto framework 
   - [ ] Try to implement the base framework functions in TS
   - [ ] Get rid of lint/lsp warning for unused declarations in TS
+- [ ] Possibly throw the page status code in the get page data function so that each page can return their own status codes
+- [ ] Add an internal server failure page
 
 ## CRA CLI TODOs:
 - [ ] Cleanup the vars section
