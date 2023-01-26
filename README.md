@@ -12,7 +12,7 @@
 
 # ROADMAP
 ## V0.1.0
-- Version 1 will be about having all the bells and whistles that anyone might ever want
+- Version 0.1 will be about having all the bells and whistles that anyone might ever want
 - If the user does not want some of those features, they can just remove them manually 
 
 ### TODOs:
@@ -25,9 +25,10 @@
 - [ ] Finish a basic version of the cli
 - [ ] Package up the cli
 - [ ] Figure out how to remove the exports from js dist
+- [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
 
 ## Template TODOs:
-- [ ] Link all of the libraries in "featuring" section
+- [x] Link all of the libraries in "featuring" section
 - [ ] Actually setup the rootSitePath
 - [ ] Setup a good way to serve static content such as libraries
 - [ ] Maybe think about setting up some theme or CSS library?
@@ -58,14 +59,6 @@
   - [ ] Get rid of lint/lsp warning for unused declarations in TS
 - [ ] Possibly throw the page status code in the get page data function so that each page can return their own status codes
 - [ ] Add an internal server failure page
-
-## CRA CLI TODOs:
-- [ ] Cleanup the vars section
-- [ ] Organise the functions to be bound to an instance of either the options struct or another struct which would hold the options
-  - [ ] Have a lot of the hard-coded global variables inside that function to make it more modular and to have a lot of that config organised in one place
-  - [ ] Donno if it makes sense but could even have that config being pulled from an env file...
-- [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
-
 
 # For getting the dev script to run 
 ```sh 
