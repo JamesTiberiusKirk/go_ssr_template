@@ -4,8 +4,10 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "spa:install": "(cd site/spa/react_portal && npm install)",
+    "spa:build": "(cd site/spa/react_portal && npm run build)",
+    "spa:dev_run": "(cd site/spa/react_portal && npm start)"
   },
   "repository": {
     "type": "git",

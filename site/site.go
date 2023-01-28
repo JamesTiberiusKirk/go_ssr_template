@@ -5,10 +5,12 @@ import (
 	"go_web_template/session"
 	"go_web_template/site/page"
 	"go_web_template/site/renderer"
+	"go_web_template/site/spa"
 	"html/template"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	echoMw "github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
 )
 
@@ -19,6 +21,7 @@ type Site struct {
 	authedPages    []*page.Page
 	notFoundPage   *page.Page
 	staticFolders  map[string]string
+	spaSites       []*spa.Site
 	db             *gorm.DB
 	sessionManager *session.Manager
 	echo           *echo.Echo
@@ -44,6 +47,9 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 		staticFolders: map[string]string{
 			"/static": "site/static/",
 			"/assets": "site/assets/",
+		},
+		spaSites: []*spa.Site{
+			spa.NewReactPortal(),
 		},
 		notFoundPage:   page.NewNotFoundPage(),
 		db:             db,
@@ -74,6 +80,7 @@ func (s *Site) Serve() {
 		s.notFoundPage.GetPageHandler(http.StatusNotFound, *s.sessionManager, s.routes))
 
 	s.mapStatic()
+	s.mapSpaSites()
 }
 
 // GetRoutes to get routes which have been made in the server
@@ -96,10 +103,23 @@ func (s *Site) buildRenderer() {
 	})
 }
 
+func (s *Site) mapSpaSites(middlewares ...echo.MiddlewareFunc) {
+	for _, spa := range s.spaSites {
+		route := s.rootSitePath + spa.Path
+
+		group := s.echo.Group(route)
+		group.Use(echoMw.StaticWithConfig(echoMw.StaticConfig{
+			Root:   spa.Dist,
+			Index:  spa.Index,
+			Browse: false,
+			HTML5:  true,
+		}))
+	}
+}
+
 func (s *Site) mapStatic() {
 	for k, v := range s.staticFolders {
 		s.echo.Static(k, v)
-
 	}
 }
 

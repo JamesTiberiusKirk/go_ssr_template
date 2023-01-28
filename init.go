@@ -73,6 +73,7 @@ func initServer(c Config) *echo.Echo {
 		},
 	}))
 
+	e.Use(middleware.Gzip())
 	e.Use(middleware.Recover())
 
 	return e
