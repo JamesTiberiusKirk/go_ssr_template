@@ -28,6 +28,8 @@
 - [ ] Package up the cli
 - [ ] Figure out how to remove the exports from js dist
 - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
+- [ ] Make a detailed writeup about what this is meant to be 
+  -  [ ] Including detailed READMEs on every feature
 
 ## V0.2.0
 - This will be about expanding on the feature set
