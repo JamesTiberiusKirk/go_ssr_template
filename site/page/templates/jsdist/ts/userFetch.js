@@ -6,6 +6,5 @@ function render(_data) {
         border: "solid 2px red",
         color: "blue",
     };
-    console.dir(elem(html.DIV, ""));
     return elem(html.DIV, elem(html.H2, `This is a hello world from ts ${_data.user.email}`, { style: styles }));
 }

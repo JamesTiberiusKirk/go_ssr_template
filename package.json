@@ -2,7 +2,6 @@
   "name": "go_web_template",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "spa:install": "(cd site/spa/react_portal && npm install)",

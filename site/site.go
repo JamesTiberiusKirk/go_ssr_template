@@ -14,6 +14,10 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	siteName = "site"
+)
+
 // Site site struct with config and dependencies
 type Site struct {
 	rootSitePath   string
@@ -114,6 +118,8 @@ func (s *Site) mapSpaSites(middlewares ...echo.MiddlewareFunc) {
 			Browse: false,
 			HTML5:  true,
 		}))
+
+		s.routes[siteName][spa.MenuID] = route
 	}
 }
 
@@ -126,7 +132,7 @@ func (s *Site) mapStatic() {
 func (s *Site) mapPages(pages *[]*page.Page, middlewares ...echo.MiddlewareFunc) {
 	for _, p := range *pages {
 		route := s.rootSitePath + p.Path
-		s.routes["site"][p.MenuID] = route
+		s.routes[siteName][p.MenuID] = route
 	}
 
 	for _, p := range *pages {

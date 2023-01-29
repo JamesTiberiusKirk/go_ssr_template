@@ -11,4 +11,5 @@ export HTTP_ROOT_PATH=
 export HTTP_ROOT_API_PATH=/api/v1
 export SESSION_SECRET=super_secret
 
-reflex -d none -sr '.*\.(go|ts)$' -- sh -c 'npm run build && go run go_web_template'
+# reflex -d none -sr '.*\.(go|ts)$' -- sh -c 'npm run build && go run go_web_template'
+reflex -d none -sr '.*\.(go)$' -- sh -c 'go run go_web_template'

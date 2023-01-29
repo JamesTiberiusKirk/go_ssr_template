@@ -90,4 +90,3 @@ contentDiv = document.getElementById("ssr_example")
 if (typeof contentDiv !== 'undefined' && typeof render !== 'undefined') {
   contentDiv.appendChild(render(_data))
 }
-

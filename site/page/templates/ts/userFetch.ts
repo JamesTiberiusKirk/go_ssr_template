@@ -2,14 +2,11 @@ import { UserPageData } from "../tstypes/types";
 
 // TODO: Figure out how to get rid of the unused declaration
 function render(_data: UserPageData) {
-
   let styles = {
     border: "solid 2px red",
     color: "blue",
   } as CSSStyleDeclaration
 
-  console.dir(elem(html.DIV, ""))
-  
   return elem(html.DIV, 
     elem(
       html.H2,

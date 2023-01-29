@@ -33,7 +33,15 @@
     <div id="page_content">
       {{template "content" .}}
     </div>
-  
+
+
+    <div>
+      <h1>Available routes</h1>
+      {{ range $key, $value := .routes.site }}
+        <a href={{$value}}>{{$key}}</a>
+        <br/>
+      {{ end }}
+    </div>
 
     {{ includeJs "framework/framework.js" }}
   </body>

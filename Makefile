@@ -14,3 +14,6 @@ dev_setup:
 install:
 	go get ./...
 	go mod vendor
+
+spa_build:
+	npm run spa:build

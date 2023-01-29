@@ -9,6 +9,7 @@
 - Session authentication
 - (Reflex)[github.com/cespare/reflex] for hotloading
 - Forked (tygo)[github.com/gzuidhof/tygo] and added a few features for Typescript type generation from go structs
+  - (Fork here)[github.com/JamesTiberiusKirk/tygo]
 
 # ROADMAP
 ## V0.1.0
@@ -20,10 +21,10 @@
 - [x] Actually setup the rootSitePath
 - [x] Setup a good way to serve static content such as libraries
 - [x] Setup a 404 default re-routing
-- [ ] Add support for SPAs (vue, angular, react, etc...) inside pages
-  - With support for letting the spa use its own router
-  - Expose page id to overall app for possible menu support
-  - Need to implement some proxy system for being able to use the react dev server in development
+- [x] Add support for SPAs (vue, angular, react, etc...) inside pages
+  - [x] With support for letting the spa use its own router
+  - [ ] Expose page id to overall app for possible menu support
+  - [ ] Need to implement some proxy system for being able to use the react dev server in development
 - [ ] Finish a basic version of the cli
 - [ ] Package up the cli
 - [ ] Figure out how to remove the exports from js dist
