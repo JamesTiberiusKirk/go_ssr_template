@@ -23,10 +23,11 @@
 - [x] Add support for SPAs (vue, angular, react, etc...) inside pages
   - [x] With support for letting the spa use its own router
   - [x] Need to implement some proxy system for being able to use the react dev server in development
+- [ ] Figure out how to remove the exports from js dist
+  - [x] Added a patch where export as a var is defined in the template import
 - [ ] CLI stuff
-  - [ ] Finish a basic version of the cli
+  - [x] Finish a basic version of the cli with no options or interface
   - [ ] Package up the cli
-  - [ ] Figure out how to remove the exports from js dist
   - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
 - [ ] Make a detailed writeup about what this is meant to be 
   - [ ] Including detailed READMEs on every feature

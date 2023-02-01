@@ -1,6 +1,7 @@
 package cra
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -132,4 +133,34 @@ func customCopyDir(source, dest, sedCmd string) error {
 	}
 
 	return nil
+}
+
+func getIgnoreContents(path string) ([]string, error) {
+	sourceFileStat, err := os.Stat(path)
+	if err != nil {
+		return nil, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return nil, fmt.Errorf("%s is not a regular file", path)
+	}
+
+	file, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	result := []string{}
+	for scanner.Scan() {
+		result = append(result, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("cannot read file %s", path)
+	}
+
+	return result, nil
 }

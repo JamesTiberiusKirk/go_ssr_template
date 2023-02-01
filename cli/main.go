@@ -14,15 +14,15 @@ var (
 		TemplateDir:         ".",
 		ProjectName:         "test_project",
 		GoProjectModuleName: "example.com/me/test_project",
-		Vendoring:           true,
+		Vendoring:           false,
 		Selections: cra.Selections{
 			API:  true,
 			Site: true,
 			SiteConfig: &cra.Site{
 				Templating: true,
 				SSR:        true,
-				Static:     false,
-				StaticSPA:  false,
+				Static:     true,
+				SPA:        true,
 			},
 			Auth: cra.Session,
 		},

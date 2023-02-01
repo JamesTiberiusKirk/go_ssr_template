@@ -16,7 +16,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		return err
 	}
 
-	mainConfig := ""
+	// mainConfig := ""
 	dest += "/"
 
 	escaped := strings.Replace(options.GoProjectModuleName, ".", "\\.", -1)
@@ -32,30 +32,22 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		}
 	}
 
-	if options.Selections.Site {
-		log.Println("Moving Site files")
-		for ssrFile, t := range wt.siteFiles {
-			filePath := fmt.Sprintf("%s/%s", options.TemplateDir, ssrFile)
-			err := customCopy(filePath, dest+ssrFile, sedCommand, t)
-			if err != nil {
-				return err
-			}
+	log.Println("Moving Site files")
+	for ssrFile, t := range wt.siteFiles {
+		filePath := fmt.Sprintf("%s/%s", options.TemplateDir, ssrFile)
+		err := customCopy(filePath, dest+ssrFile, sedCommand, t)
+		if err != nil {
+			return err
 		}
-
-		mainConfig += fmt.Sprintf(configs[mainSiteConfig])
 	}
 
-	if options.Selections.API {
-		log.Println("Moving API files")
-		for apiFile, t := range wt.apiFiles {
-			filePath := fmt.Sprintf("%s/%s", options.TemplateDir, apiFile)
-			err := customCopy(filePath, dest+apiFile, sedCommand, t)
-			if err != nil {
-				return err
-			}
+	log.Println("Moving API files")
+	for apiFile, t := range wt.apiFiles {
+		filePath := fmt.Sprintf("%s/%s", options.TemplateDir, apiFile)
+		err := customCopy(filePath, dest+apiFile, sedCommand, t)
+		if err != nil {
+			return err
 		}
-
-		mainConfig += fmt.Sprintf(configs[mainApiConfig])
 	}
 
 	err = os.Chmod(dest+"dev_run.sh", 0755)
@@ -63,18 +55,24 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		return err
 	}
 
-	log.Println("Creating main from template")
-	err = wt.makeMainFileFromTemplate(mainConfig)
-	if err != nil {
-		return err
-	}
+	// log.Println("Creating main from template")
+	// err = wt.makeMainFileFromTemplate(mainConfig)
+	// if err != nil {
+	// 	return err
+	// }
 
 	if options.Vendoring {
 		wt.commands = append(wt.commands, CMD{
 			Key:     "vendoring",
 			Command: []string{"go", "mod", "vendor"},
 		})
+	}
 
+	if options.Selections.SiteConfig.SPA {
+		wt.commands = append(wt.commands, CMD{
+			Key:     "spa:install",
+			Command: []string{"npm", "run", "spa:install"},
+		})
 	}
 
 	log.Println("Running go setup commands")
@@ -121,11 +119,11 @@ func (wt *WebTemplate) runGoSetupCommands(projectPath string) error {
 		var err error
 		switch cmd.Key {
 		case "init":
-			err = runCMD(projectPath, append(cmd.Command, wt.options.GoProjectModuleName))
+			err = runCMD(projectPath, append(cmd.Command, wt.options.GoProjectModuleName), wt.verbose)
 		case "imports":
-			err = runCMD(projectPath, append(cmd.Command, wt.mainGo))
+			err = runCMD(projectPath, append(cmd.Command, wt.mainGo), wt.verbose)
 		default:
-			err = runCMD(projectPath, cmd.Command)
+			err = runCMD(projectPath, cmd.Command, wt.verbose)
 		}
 		if err != nil {
 			return err

@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func runCMD(dir string, cmdStrings []string) error {
+func runCMD(dir string, cmdStrings []string, verbose bool) error {
 	args := cmdStrings[1:]
 	cmd := exec.Command(cmdStrings[0], args...)
 	cmd.Dir = dir
@@ -14,6 +14,23 @@ func runCMD(dir string, cmdStrings []string) error {
 	log.Println(cmd.String())
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("error executing command: %e", err)
+	}
+
+	if verbose {
+		stdout, err := cmd.StdoutPipe()
+		cmd.Stderr = cmd.Stdout
+		if err != nil {
+			return err
+		}
+
+		for {
+			tmp := make([]byte, 1024)
+			_, err := stdout.Read(tmp)
+			fmt.Print(string(tmp))
+			if err != nil {
+				break
+			}
+		}
 	}
 
 	if err := cmd.Wait(); err != nil {
