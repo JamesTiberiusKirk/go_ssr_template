@@ -1,6 +1,3 @@
-runserver:
-	./dev_run.sh
-
 tsgen: 
 	npm run build
 

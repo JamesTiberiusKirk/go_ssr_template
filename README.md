@@ -22,12 +22,12 @@
 - [x] Setup a 404 default re-routing
 - [x] Add support for SPAs (vue, angular, react, etc...) inside pages
   - [x] With support for letting the spa use its own router
-  - [ ] Expose page id to overall app for possible menu support
-  - [ ] Need to implement some proxy system for being able to use the react dev server in development
-- [ ] Finish a basic version of the cli
-- [ ] Package up the cli
-- [ ] Figure out how to remove the exports from js dist
-- [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
+  - [x] Need to implement some proxy system for being able to use the react dev server in development
+- [ ] CLI stuff
+  - [ ] Finish a basic version of the cli
+  - [ ] Package up the cli
+  - [ ] Figure out how to remove the exports from js dist
+  - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
 - [ ] Make a detailed writeup about what this is meant to be 
   - [ ] Including detailed READMEs on every feature
 

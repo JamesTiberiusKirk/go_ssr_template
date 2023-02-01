@@ -8,6 +8,8 @@ import (
 	"go_web_template/site/spa"
 	"html/template"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 
 	"github.com/labstack/echo/v4"
 	echoMw "github.com/labstack/echo/v4/middleware"
@@ -20,6 +22,7 @@ const (
 
 // Site site struct with config and dependencies
 type Site struct {
+	dev            bool
 	rootSitePath   string
 	publicPages    []*page.Page
 	authedPages    []*page.Page
@@ -36,8 +39,9 @@ type Site struct {
 
 // NewSite init Site
 func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
-	sessionManager *session.Manager) *Site {
+	sessionManager *session.Manager, dev bool) *Site {
 	return &Site{
+		dev:          dev,
 		rootSitePath: rootSitePath,
 		publicPages: []*page.Page{
 			page.NewLoginPage(db, sessionManager),
@@ -111,13 +115,22 @@ func (s *Site) mapSpaSites(middlewares ...echo.MiddlewareFunc) {
 	for _, spa := range s.spaSites {
 		route := s.rootSitePath + spa.Path
 
-		group := s.echo.Group(route)
-		group.Use(echoMw.StaticWithConfig(echoMw.StaticConfig{
-			Root:   spa.Dist,
-			Index:  spa.Index,
-			Browse: false,
-			HTML5:  true,
-		}))
+		switch s.dev {
+		case true:
+			proxy := httputil.NewSingleHostReverseProxy(&url.URL{
+				Scheme: "http",
+				Host:   "localhost:3001",
+			})
+			s.echo.Any(spa.Path+"*", echo.WrapHandler(proxy))
+		case false:
+			group := s.echo.Group(route)
+			group.Use(echoMw.StaticWithConfig(echoMw.StaticConfig{
+				Root:   spa.Dist,
+				Index:  spa.Index,
+				Browse: false,
+				HTML5:  true,
+			}))
+		}
 
 		s.routes[siteName][spa.MenuID] = route
 	}

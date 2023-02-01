@@ -20,7 +20,7 @@ func main() {
 
 	apiServer := api.NewApi(e.Group(config.Http.RootApiPath), config.Http.RootApiPath, db,
 		sessionManager)
-	siteServer := site.NewSite(e, config.Http.RootSitePath, db, sessionManager)
+	siteServer := site.NewSite(e, config.Http.RootSitePath, db, sessionManager, config.Debug)
 
 	apiServer.Serve()
 	apiRoutes := apiServer.GetRoutes()

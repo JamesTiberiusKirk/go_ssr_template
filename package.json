@@ -6,7 +6,7 @@
     "build": "tsc",
     "spa:install": "(cd site/spa/react_portal && npm install)",
     "spa:build": "(cd site/spa/react_portal && npm run build)",
-    "spa:dev_run": "(cd site/spa/react_portal && npm start)"
+    "spa:run": "(cd site/spa/react_portal && npm start)"
   },
   "repository": {
     "type": "git",

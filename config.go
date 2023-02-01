@@ -1,7 +1,10 @@
 package main
 
 import (
+	"log"
+
 	env "github.com/Netflix/go-env"
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 )
 
@@ -24,6 +27,11 @@ type Config struct {
 }
 
 func buildConfig() Config {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	var c Config
 	es, err := env.UnmarshalFromEnviron(&c)
 	if err != nil {
