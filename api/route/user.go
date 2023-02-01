@@ -9,8 +9,7 @@ import (
 )
 
 const (
-	userApiRoute  = "/:email"
-	usersApiRoute = "/users"
+	userApiRoute = "/:email"
 )
 
 // UserRoute user route dependency struct
@@ -25,21 +24,11 @@ func NewUserRoute(db *gorm.DB) *Route {
 	}
 
 	return &Route{
-		SubRoute: &Route{
-			RouteID:    "user",
-			Depts:      depts,
-			Path:       userApiRoute,
-			GetHandler: depts.GetUser,
-		},
 		RouteID:    "users",
 		Path:       usersApiRoute,
 		Depts:      depts,
-		GetHandler: depts.GetUsers,
+		GetHandler: depts.GetUser,
 	}
-}
-
-type GetHandlerResponse struct {
-	Users []models.User `json:"users"`
 }
 
 func (r *UserRoute) GetUser(c echo.Context) error {
@@ -56,15 +45,4 @@ func (r *UserRoute) GetUser(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, user)
-}
-
-func (r *UserRoute) GetUsers(c echo.Context) error {
-	users := []models.User{}
-	result := r.db.Find(&users)
-	if result.Error != nil {
-		c.NoContent(http.StatusInternalServerError)
-		return result.Error
-	}
-
-	return c.JSON(http.StatusOK, users)
 }

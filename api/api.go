@@ -27,7 +27,7 @@ func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
 		rootApiPath:  rootApiPath,
 		publicRoutes: []*route.Route{},
 		authedRoutes: []*route.Route{
-			route.NewUserRoute(db),
+			route.NewUsersRoute(db, route.NewUserRoute(db)),
 		},
 		echoGroup:      group,
 		db:             db,
