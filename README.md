@@ -31,6 +31,7 @@
   - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
 - [ ] Make a detailed writeup about what this is meant to be 
   - [ ] Including detailed READMEs on every feature
+- [ ] Look into actually giving it a proper github url module name
 
 ## V0.2.0
 - This will be about expanding on the feature set
@@ -75,6 +76,7 @@
   - [ ] Get rid of lint/lsp warning for unused declarations in TS
 - [ ] Possibly throw the page status code in the get page data function so that each page can return their own status codes
 - [ ] Add an internal server failure page
+- [ ] Break out the template, spa, and static serving into their own sub structures maybe?
 
 # For getting the dev script to run 
 ```sh 
