@@ -20,3 +20,6 @@
   - See example of this in users.go
 - Examples for this can be found in `api/route/user.go` (sub route) and `api/route/users.go` (parent route)
 
+# Removal instructions
+- Remove this package
+- Remove the appropriate code from main.go
