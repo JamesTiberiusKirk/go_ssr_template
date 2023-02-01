@@ -11,9 +11,9 @@
   - there are multiple for being able to toggle them from the page
  
 ## Sub-features
-- [SPA](site/spa/README.md)
+- [SPA](spa/README.md)
 - [Static serving](#static-serving)
-- [SSR/Templating](site/page/README.md)
+- [SSR/Templating](page/README.md)
 
 # Removal instructions
 - Remove the entire `Site` package
