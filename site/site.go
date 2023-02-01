@@ -127,7 +127,7 @@ func (s *Site) mapSpaSites(middlewares ...echo.MiddlewareFunc) {
 			group.Use(echoMw.StaticWithConfig(echoMw.StaticConfig{
 				Root:   spa.Dist,
 				Index:  spa.Index,
-				Browse: false,
+				Browse: spa.Routing,
 				HTML5:  true,
 			}))
 		}
