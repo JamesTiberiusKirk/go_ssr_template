@@ -85,7 +85,7 @@ There is definitely some work to be done here both on the typescript implementat
 However, the whole point of this is that it can be built up as much or as little by the dev using this template.
 
 ## Removal instruction
-Wanna get rid of this neuro-diverging code? I don't blame you, just follow the following.
+Wanna get rid of this neurodivergent code? I don't blame you, just follow the following.
 - Remove the inclusion of the framework in the frame templates.
 - Remove the following folders:
   - framework
