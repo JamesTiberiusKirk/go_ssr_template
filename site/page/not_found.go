@@ -18,7 +18,7 @@ func NewNotFoundPage() *Page {
 	deps := &NotFoundPage{}
 
 	return &Page{
-		MenuID:      "not-found-page",
+		MenuID:      "notFoundPage",
 		Title:       "NotFound",
 		Frame:       true,
 		Path:        notFoundPageUri,

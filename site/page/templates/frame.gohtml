@@ -20,12 +20,13 @@
     {{end}}
 
 
-    <a href={{index .routes.site "home-page"}}>Home</a>
-    <a href={{index .routes.site "login-page"}}>Login</a>
+    <a href={{.routes.site.homePage}}>Home</a>
+    <a href={{.routes.site.loginPage}}>Login</a>
+
 
     {{if .auth.username }}
-      <a href={{index .routes.site "user-page"}}>User</a>
-      <a href={{index .routes.site "user-ssr-page"}}>UserSSR</a>
+      <a href={{.routes.site.userPage}}>User</a>
+      <a href={{.routes.site.userSsrPage}}>UserSSR</a>
     {{end}}
 
     {{ include "framework/framework.gohtml" }}

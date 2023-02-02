@@ -30,7 +30,7 @@ func NewUserPage(db *gorm.DB, session *session.Manager) *Page {
 	}
 
 	return &Page{
-		MenuID:      "user-page",
+		MenuID:      "userPage",
 		Title:       "User Page",
 		Frame:       true,
 		Path:        userPageUri,

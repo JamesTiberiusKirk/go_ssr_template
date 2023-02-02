@@ -24,7 +24,7 @@ func NewUserRoute(db *gorm.DB) *Route {
 	}
 
 	return &Route{
-		RouteID:    "users",
+		RouteID:    "user",
 		Path:       usersApiRoute,
 		Depts:      depts,
 		GetHandler: depts.GetUser,

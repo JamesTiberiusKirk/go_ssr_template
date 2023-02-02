@@ -18,7 +18,7 @@ func NewHomePage() *Page {
 	deps := &HomePage{}
 
 	return &Page{
-		MenuID:      "home-page",
+		MenuID:      "homePage",
 		Title:       "Home Page",
 		Frame:       true,
 		Path:        homePageUri,

@@ -19,7 +19,7 @@ func NewHelloWorld() *Route {
 	depts := &HelloWorld{}
 
 	return &Route{
-		RouteID:    "users",
+		RouteID:    "helloWorld",
 		Path:       helloWorldApiRoute,
 		Depts:      depts,
 		GetHandler: depts.Hello,

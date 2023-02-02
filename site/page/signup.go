@@ -35,7 +35,7 @@ func NewSignupPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	}
 
 	return &Page{
-		MenuID:      "signup-page",
+		MenuID:      "signupPage",
 		Title:       "Signup",
 		Frame:       true,
 		Path:        "/signup",

@@ -29,7 +29,7 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 	}
 
 	return &Page{
-		MenuID:      "login-page",
+		MenuID:      "loginPage",
 		Title:       "Login",
 		Frame:       true,
 		Path:        loginPageUri,
