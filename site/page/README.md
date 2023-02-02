@@ -69,7 +69,7 @@ function render(_data:any): HTMLElement
 And return a HTML element using the `elem` function.
 
 Any form of reactivity and re-rendering is actually done quite simply. When defining a html element, give it an id (can be done through the options param) and just use the `document.getElementById` api to perform any dom manipulation necessary.  
-Simple.
+**Simple.**
 
 ## How does TypeScipt come into all of this mess?
 Well, there are typescript bindings for all of the different variables, types and functions which exist. See `./ts/global.d.ts` file.
