@@ -6,6 +6,7 @@ import (
 	"go_web_template/session"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
 )
 
@@ -24,8 +25,10 @@ type Api struct {
 func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
 	sesessionManager *session.Manager) *Api {
 	return &Api{
-		rootApiPath:  rootApiPath,
-		publicRoutes: []*route.Route{},
+		rootApiPath: rootApiPath,
+		publicRoutes: []*route.Route{
+			route.NewHelloWorld(),
+		},
 		authedRoutes: []*route.Route{
 			route.NewUsersRoute(db, route.NewUserRoute(db)),
 		},
@@ -38,6 +41,11 @@ func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
 
 // Serve api
 func (a *Api) Serve() {
+	a.echoGroup.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
+
 	a.mapRoutes(&a.publicRoutes)
 	a.mapRoutes(&a.authedRoutes, session.SessionAuthMiddleware(a.sessionManager))
 }
