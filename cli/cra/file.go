@@ -31,7 +31,7 @@ func customCopy(source, dest, sedCmd string, t ItemType) error {
 			return err
 		}
 	default:
-		log.Printf("Type: %s | Unsupported file type", t)
+		fmt.Printf("Type: %s | Unsupported file type", t)
 		return nil
 	}
 
@@ -77,7 +77,7 @@ func customCopyFile(source, dest, sedCmd string) error {
 			return err
 		}
 
-		// log.Printf("Copied %s to %s", source, dest)
+		// fmt.Printf("Copied %s to %s", source, dest)
 
 		return nil
 	}
@@ -87,7 +87,7 @@ func customCopyFile(source, dest, sedCmd string) error {
 		return err
 	}
 
-	// log.Printf("Copied %s to %s", source, dest)
+	// fmt.Printf("Copied %s to %s", source, dest)
 
 	return nil
 }

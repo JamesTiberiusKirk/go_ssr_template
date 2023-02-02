@@ -2,7 +2,6 @@ package cra
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
 )
 
@@ -11,7 +10,7 @@ func runCMD(dir string, cmdStrings []string, verbose bool) error {
 	cmd := exec.Command(cmdStrings[0], args...)
 	cmd.Dir = dir
 
-	log.Println(cmd.String())
+	fmt.Println(cmd.String())
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("error executing command: %e", err)
 	}

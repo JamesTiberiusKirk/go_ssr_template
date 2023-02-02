@@ -10,7 +10,7 @@ import (
 
 func (wt *WebTemplate) NewProject(options Options) error {
 	dest := fmt.Sprintf("%s/%s", options.ProjectParentDir, options.ProjectName)
-	log.Printf("Making new project directory %s", dest)
+	fmt.Printf("Making new project directory %s", dest)
 	err := os.Mkdir(dest, 0755)
 	if err != nil {
 		return err
@@ -23,7 +23,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 	escaped = strings.Replace(escaped, "/", "\\/", -1)
 	sedCommand := fmt.Sprintf(wt.sedTemplateNameCommand, escaped)
 
-	log.Println("Moving base files")
+	fmt.Println("Moving base files")
 	for baseFile, t := range wt.baseFiles {
 		filePath := fmt.Sprintf("%s/%s", options.TemplateDir, baseFile)
 		err := customCopy(filePath, dest+baseFile, sedCommand, t)
@@ -32,7 +32,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		}
 	}
 
-	log.Println("Moving Site files")
+	fmt.Println("Moving Site files")
 	for ssrFile, t := range wt.siteFiles {
 		filePath := fmt.Sprintf("%s/%s", options.TemplateDir, ssrFile)
 		err := customCopy(filePath, dest+ssrFile, sedCommand, t)
@@ -41,7 +41,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		}
 	}
 
-	log.Println("Moving API files")
+	fmt.Println("Moving API files")
 	for apiFile, t := range wt.apiFiles {
 		filePath := fmt.Sprintf("%s/%s", options.TemplateDir, apiFile)
 		err := customCopy(filePath, dest+apiFile, sedCommand, t)
@@ -55,7 +55,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		return err
 	}
 
-	// log.Println("Creating main from template")
+	// fmt.Println("Creating main from template")
 	// err = wt.makeMainFileFromTemplate(mainConfig)
 	// if err != nil {
 	// 	return err
@@ -75,7 +75,7 @@ func (wt *WebTemplate) NewProject(options Options) error {
 		})
 	}
 
-	log.Println("Running go setup commands")
+	fmt.Println("Running go setup commands")
 	err = wt.runGoSetupCommands(dest)
 	if err != nil {
 		return err
