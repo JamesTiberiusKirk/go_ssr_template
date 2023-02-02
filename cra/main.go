@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/JamesTiberiusKirk/go_web_template/cli/cra"
+	"github.com/JamesTiberiusKirk/go_web_template/cra/cra"
 )
 
 // var (
