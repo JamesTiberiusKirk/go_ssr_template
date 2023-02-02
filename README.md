@@ -15,7 +15,7 @@
 - [Site](site/)
   - [SPA](site/spa/)
   - [SSR/Templating](site/page/)
-  - [JS/TS templating framework](site/page#js/ts-minimal-ssr-framework)
+  - [JS/TS templating framework](site/page#jsts-minimal-ssr-framework)
 
 
 
