@@ -8,7 +8,10 @@
 ## Site fields
 - `dev` proxying connections to dev servers with an SPA
 - `frameTmpls` is for defining a frame templates
-  - there are multiple for being able to toggle them from the page
+  - There are multiple for being able to toggle them from the page
+  - In this state it is used to either have a frame (header, footer, etc)
+  - Or have an empty frame.
+  - This system could be modified to allow for multiple custom frames.
  
 ## Sub-features
 - [SPA](spa/README.md)
