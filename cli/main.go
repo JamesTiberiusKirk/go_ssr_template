@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"go_web_template/cli/cra"
+	"github.com/JamesTiberiusKirk/go_web_template/cli/cra"
 	"log"
 	"os"
 )

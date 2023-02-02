@@ -1,7 +1,7 @@
 package route
 
 import (
-	"go_web_template/models"
+	"github.com/JamesTiberiusKirk/go_web_template/models"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

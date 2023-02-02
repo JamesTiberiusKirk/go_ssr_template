@@ -3,7 +3,7 @@ package session
 
 import (
 	"errors"
-	"go_web_template/models"
+	"github.com/JamesTiberiusKirk/go_web_template/models"
 
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"

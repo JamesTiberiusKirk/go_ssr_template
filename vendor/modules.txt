@@ -75,8 +75,6 @@ github.com/rwtodd/Go.Sed/sed
 # github.com/sirupsen/logrus v1.9.0
 ## explicit; go 1.13
 github.com/sirupsen/logrus
-# github.com/tkrajina/go-reflector v0.5.5
-## explicit; go 1.17
 # github.com/valyala/bytebufferpool v1.0.0
 ## explicit
 github.com/valyala/bytebufferpool

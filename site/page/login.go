@@ -1,8 +1,8 @@
 package page
 
 import (
-	"go_web_template/models"
-	"go_web_template/session"
+	"github.com/JamesTiberiusKirk/go_web_template/models"
+	"github.com/JamesTiberiusKirk/go_web_template/session"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

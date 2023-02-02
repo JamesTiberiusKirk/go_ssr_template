@@ -1,7 +1,7 @@
 package route
 
 import (
-	"go_web_template/server"
+	"github.com/JamesTiberiusKirk/go_web_template/server"
 
 	"github.com/labstack/echo/v4"
 )

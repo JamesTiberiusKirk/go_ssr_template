@@ -3,7 +3,7 @@ package renderer
 import (
 	"bytes"
 	"fmt"
-	"go_web_template/site/page"
+	"github.com/JamesTiberiusKirk/go_web_template/site/page"
 	"html/template"
 	"io"
 	"io/ioutil"

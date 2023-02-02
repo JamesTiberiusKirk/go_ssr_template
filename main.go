@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go_web_template/api"
-	"go_web_template/session"
-	"go_web_template/site"
+	"github.com/JamesTiberiusKirk/go_web_template/api"
+	"github.com/JamesTiberiusKirk/go_web_template/session"
+	"github.com/JamesTiberiusKirk/go_web_template/site"
 )
 
 func main() {

@@ -1,11 +1,11 @@
 package site
 
 import (
-	"go_web_template/server"
-	"go_web_template/session"
-	"go_web_template/site/page"
-	"go_web_template/site/renderer"
-	"go_web_template/site/spa"
+	"github.com/JamesTiberiusKirk/go_web_template/server"
+	"github.com/JamesTiberiusKirk/go_web_template/session"
+	"github.com/JamesTiberiusKirk/go_web_template/site/page"
+	"github.com/JamesTiberiusKirk/go_web_template/site/renderer"
+	"github.com/JamesTiberiusKirk/go_web_template/site/spa"
 	"html/template"
 	"net/http"
 	"net/http/httputil"

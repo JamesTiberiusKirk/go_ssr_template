@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go_web_template/models"
+	"github.com/JamesTiberiusKirk/go_web_template/models"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

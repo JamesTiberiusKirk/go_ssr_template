@@ -80,7 +80,7 @@ func NewWebTemplate(options Options, verbose bool) WebTemplate {
 			"api": dir,
 		},
 		mainGo:                 "main.go",
-		sedTemplateNameCommand: "s/go_web_template/%s/g",
+		sedTemplateNameCommand: "s/github.com/JamesTiberiusKirk/go_web_template/%s/g",
 		commands: []CMD{
 			{
 				Key:     "git",

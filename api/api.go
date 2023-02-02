@@ -1,9 +1,9 @@
 package api
 
 import (
-	"go_web_template/api/route"
-	"go_web_template/server"
-	"go_web_template/session"
+	"github.com/JamesTiberiusKirk/go_web_template/api/route"
+	"github.com/JamesTiberiusKirk/go_web_template/server"
+	"github.com/JamesTiberiusKirk/go_web_template/session"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
