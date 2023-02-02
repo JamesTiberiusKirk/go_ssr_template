@@ -8,7 +8,7 @@ builds:
     goarch:
       - amd64
     ldflags:
-      - -s -w -X github.com/JamesTiberiusKirk/go_web_template/cli.version={{.Version}} -X github.com/JamesTiberiusKirk/go_web_template/cli.commit={{.Commit}} -X github.com/JamesTiberiusKirk/go_web_template/cli.commitDate={{.CommitDate}} -X github.com/JamesTiberiusKirk/go_web_template/cli.target={{.Env.GOOS}}
+      - -s -w -X github.com/JamesTiberiusKirk/go_web_template/cra.version={{.Version}} -X github.com/JamesTiberiusKirk/go_web_template/cra.commit={{.Commit}} -X github.com/JamesTiberiusKirk/go_web_template/cra.commitDate={{.CommitDate}} -X github.com/JamesTiberiusKirk/go_web_template/cra.target={{.Env.GOOS}}
 archives:
   - name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     replacements:

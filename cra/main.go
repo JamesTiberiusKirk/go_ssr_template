@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/JamesTiberiusKirk/go_web_template/cli/cra"
 	"log"
 	"os"
+
+	"github.com/JamesTiberiusKirk/go_web_template/cli/cra"
 )
 
 // var (
