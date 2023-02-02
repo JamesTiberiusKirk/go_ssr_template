@@ -1,0 +1,22 @@
+project_name: cra
+builds:
+  - binary: cra
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w -X github.com/JamesTiberiusKirk/go_web_template/cli.version={{.Version}} -X github.com/JamesTiberiusKirk/go_web_template/cli.commit={{.Commit}} -X github.com/JamesTiberiusKirk/go_web_template/cli.commitDate={{.CommitDate}} -X github.com/JamesTiberiusKirk/go_web_template/cli.target={{.Env.GOOS}}
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
