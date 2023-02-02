@@ -17,8 +17,8 @@
   - [x] Finish a basic version of the cli with no options or interface
   - [ ] Package up the cli
   - [ ] Implement some form of a TUI around this to pick options and selections (Bubble Tea)
-- [ ] Make a detailed writeup about what this is meant to be 
-  - [ ] Including detailed READMEs on every feature
+- [x] Make a detailed writeup about what this is meant to be 
+  - [x] Including detailed READMEs on every feature
 - [ ] Look into actually giving it a proper github url module name
 
 ## V0.2.0

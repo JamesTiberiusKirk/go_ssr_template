@@ -49,8 +49,7 @@ function innerTextById(id, text) {
 
 // elem - string - is the enum html element type
 // inner - HTML element or string- is the inner complete html string element
-// attribs - object matching element.attributes - is a string of attributes to be used for the element
-// style - object matching element.styles - is a map of strings which would be custom CSS styles
+// options - style field inside of type CSSStyleDeclaration
 // returns HTML element - allowing for easier concatination of multiple of this function
 function elem(elem, inner, options = {}) {
   const { style } = options
@@ -86,7 +85,7 @@ function elem(elem, inner, options = {}) {
   return element
 }
 
-contentDiv = document.getElementById("ssr_example")
+contentDiv = document.getElementById("page_render")
 if (typeof contentDiv !== 'undefined' && typeof render !== 'undefined') {
   contentDiv.appendChild(render(_data))
 }
