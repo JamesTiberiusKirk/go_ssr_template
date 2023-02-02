@@ -52,7 +52,7 @@ type WebTemplate struct {
 	verbose                bool
 }
 
-func NewWebTemplate(options Options) WebTemplate {
+func NewWebTemplate(options Options, verbose bool) WebTemplate {
 	return WebTemplate{
 		options: options,
 		baseFiles: map[string]ItemType{
@@ -103,7 +103,7 @@ func NewWebTemplate(options Options) WebTemplate {
 				Command: []string{"go", "get", "./..."},
 			},
 		},
-		verbose: false,
+		verbose: verbose,
 	}
 }
 
