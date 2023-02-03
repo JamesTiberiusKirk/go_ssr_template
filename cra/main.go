@@ -67,7 +67,8 @@ func main() {
 		projectOptions.TemplateDir = "."
 	} else {
 		projectOptions.TemplateDir =
-			`$GOPATH/pkg/mod/github.com/\!james\!tiberius\!kirk/go_web_template@v0.0.7`
+			`$GOPATH/pkg/mod/github.com/\!james\!tiberius\!kirk/go_web_template@` +
+				Version()
 	}
 
 	bytes, _ := json.MarshalIndent(projectOptions, "", "    ")

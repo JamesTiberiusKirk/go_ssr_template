@@ -2,7 +2,7 @@ package main
 
 // Field injected by goreleaser
 var (
-	version    = "<unknown>"
+	version    = "v0.0.8"
 	commitDate = "date unknown"
 	commit     = ""
 	target     = ""
