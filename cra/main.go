@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime/debug"
 
 	"github.com/JamesTiberiusKirk/go_web_template/cra/cra"
 )
@@ -46,7 +47,6 @@ func main() {
 
 	projectOptions := cra.Options{
 		ProjectParentDir:    flagOptions.ProjectDir,
-		TemplateDir:         ".",
 		ProjectName:         flagOptions.ProjectName,
 		GoProjectModuleName: flagOptions.GoModuleName,
 		Vendoring:           flagOptions.Vendoring,
@@ -61,6 +61,18 @@ func main() {
 			},
 			Auth: cra.Session,
 		},
+	}
+
+	if flagOptions.Debug {
+		bi, ok := debug.ReadBuildInfo()
+		if !ok {
+			log.Printf("Failed to read build info")
+			return
+		}
+
+		projectOptions.TemplateDir = `$GOPATH/pkg/mod/github.com/\!james\!tiberius\!kirk/go_web_template@` + bi.String()
+	} else {
+		projectOptions.TemplateDir = "."
 	}
 
 	bytes, _ := json.MarshalIndent(projectOptions, "", "    ")

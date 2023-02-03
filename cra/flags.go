@@ -10,6 +10,7 @@ type UserOptions struct {
 	GoModuleName string
 	Vendoring    bool
 	Verbose      bool
+	Debug        bool
 }
 
 func buildFlags() UserOptions {
@@ -21,6 +22,7 @@ func buildFlags() UserOptions {
 	flag.StringVar(&userOptions.GoModuleName, "gomod", "", "Go module name")
 	flag.BoolVar(&userOptions.Vendoring, "V", false, "Enable vendoring")
 	flag.BoolVar(&userOptions.Verbose, "vvv", false, "Verbose output")
+	flag.BoolVar(&userOptions.Debug, "d", false, "Debug mode usually used for development")
 
 	flag.Parse()
 	// if flag.NFlag() == 0 {
