@@ -33,6 +33,8 @@ import (
 // )
 
 func main() {
+	fmt.Println("CRA:", Version(), CommitDate(), Commit(), Target())
+
 	flagOptions := buildFlags()
 
 	if flagOptions.ProjectDir == "" ||
