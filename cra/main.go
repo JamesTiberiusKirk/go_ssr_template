@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime/debug"
 
 	"github.com/JamesTiberiusKirk/go_web_template/cra/cra"
 )
@@ -34,7 +33,6 @@ import (
 // )
 
 func main() {
-
 	flagOptions := buildFlags()
 
 	if flagOptions.ProjectDir == "" ||
@@ -64,15 +62,11 @@ func main() {
 	}
 
 	if flagOptions.Debug {
-		bi, ok := debug.ReadBuildInfo()
-		if !ok {
-			log.Printf("Failed to read build info")
-			return
-		}
-
-		projectOptions.TemplateDir = `$GOPATH/pkg/mod/github.com/\!james\!tiberius\!kirk/go_web_template@` + bi.String()
-	} else {
 		projectOptions.TemplateDir = "."
+	} else {
+		projectOptions.TemplateDir =
+			`$GOPATH/pkg/mod/github.com/\!james\!tiberius\!kirk/go_web_template@` +
+				Version()
 	}
 
 	bytes, _ := json.MarshalIndent(projectOptions, "", "    ")
