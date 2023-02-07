@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-// Api api struct
-type Api struct {
-	rootApiPath    string
+// API api struct.
+type API struct {
+	rootAPIPath    string
 	publicRoutes   []*route.Route
 	authedRoutes   []*route.Route
 	echoGroup      *echo.Group
@@ -21,11 +21,11 @@ type Api struct {
 	routes         server.RoutesMap
 }
 
-// NewApi new api instance
-func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
-	sesessionManager *session.Manager) *Api {
-	return &Api{
-		rootApiPath: rootApiPath,
+// NewAPI new api instance.
+func NewAPI(group *echo.Group, rootAPIPath string, db *gorm.DB,
+	sesessionManager *session.Manager) *API {
+	return &API{
+		rootAPIPath: rootAPIPath,
 		publicRoutes: []*route.Route{
 			route.NewHelloWorld(),
 		},
@@ -39,32 +39,32 @@ func NewApi(group *echo.Group, rootApiPath string, db *gorm.DB,
 	}
 }
 
-// Serve api
-func (a *Api) Serve() {
+// Serve api.
+func (a *API) Serve() {
 	a.echoGroup.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 
 	a.mapRoutes(&a.publicRoutes)
-	a.mapRoutes(&a.authedRoutes, session.SessionAuthMiddleware(a.sessionManager))
+	a.mapRoutes(&a.authedRoutes, sessionAuthMiddleware(a.sessionManager))
 }
 
-// GetRoutes returns available routes from this server
-func (a *Api) GetRoutes() server.RoutesMap {
+// GetRoutes returns available routes from this server.
+func (a *API) GetRoutes() server.RoutesMap {
 	return a.routes
 }
 
-func (a *Api) SetRoutes(t string, r server.RoutesMap) {
+func (a *API) SetRoutes(t string, r server.RoutesMap) {
 	// NOOP
 }
 
-func (a *Api) mapRoutes(routes *[]*route.Route, middlewares ...echo.MiddlewareFunc) {
+func (a *API) mapRoutes(routes *[]*route.Route, middlewares ...echo.MiddlewareFunc) {
 	for _, r := range *routes {
 		routes := r.Init("", a.echoGroup, middlewares...)
 
 		for k, v := range routes {
-			a.routes[k] = a.rootApiPath + v
+			a.routes[k] = a.rootAPIPath + v
 		}
 	}
 }

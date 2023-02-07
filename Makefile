@@ -14,3 +14,10 @@ install:
 
 spa_build:
 	npm run spa:build
+
+lint:
+	golangci-lint run
+
+lint-less:
+	golangci-lint run --color always | less -R
+

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/JamesTiberiusKirk/go_web_template/models"
 
 	"github.com/labstack/echo/v4"
@@ -11,9 +12,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func initDb(c Config) *gorm.DB {
+func initDB(c Config) *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=GMT",
-		c.Db.Host, c.Db.User, c.Db.Pass, c.Db.Name, c.Db.Port)
+		c.DB.Host, c.DB.User, c.DB.Pass, c.DB.Name, c.DB.Port)
 	db, err := gorm.Open(postgres.Open(dsn), nil)
 	if err != nil {
 		logrus.WithError(err).Fatal("failed to init db")
@@ -28,6 +29,7 @@ func initDb(c Config) *gorm.DB {
 }
 
 func initLogger() {
+	// For a json logger
 	// logrus.SetFormatter(&logrus.JSONFormatter{
 	// 	FieldMap: logrus.FieldMap{
 	// 		logrus.FieldKeyLevel: "severity",
@@ -41,7 +43,7 @@ func initLogger() {
 	})
 }
 
-func initServer(c Config) *echo.Echo {
+func initServer() *echo.Echo {
 	e := echo.New()
 
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{

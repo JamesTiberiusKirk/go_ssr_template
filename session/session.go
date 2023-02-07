@@ -2,7 +2,6 @@
 package session
 
 import (
-	"errors"
 	"github.com/JamesTiberiusKirk/go_web_template/models"
 
 	"github.com/gorilla/securecookie"
@@ -42,7 +41,7 @@ func (m *Manager) InitSession(user models.User, c echo.Context) {
 
 	sess.Values["email"] = user.Email
 	sess.Values["username"] = user.Username
-	sess.Save(c.Request(), c.Response())
+	_ = sess.Save(c.Request(), c.Response())
 }
 
 // TerminateSession will cease tracking the session for the current user.
@@ -50,7 +49,7 @@ func (m *Manager) TerminateSession(c echo.Context) {
 	sess, _ := m.Jar.Get(c.Request(), sessionName)
 	// MaxAge < 0 means delete imediately
 	sess.Options.MaxAge = -1
-	sess.Save(c.Request(), c.Response())
+	_ = sess.Save(c.Request(), c.Response())
 }
 
 // IsAuthenticated checks that a provided request is born from an active session.
@@ -60,12 +59,8 @@ func (m *Manager) IsAuthenticated(c echo.Context) bool {
 	return sess.Values["email"] != nil
 }
 
-var (
-	errNotLoggedIn = errors.New("no login")
-)
-
 // GetUser checks that a provided request is born from an active session.
-// As long as there is an active session, User is returned, else empty User
+// As long as there is an active session, User is returned, else empty User.
 func (m *Manager) GetUser(c echo.Context) (models.User, error) {
 	sess, err := m.Jar.Get(c.Request(), sessionName)
 	if err != nil {

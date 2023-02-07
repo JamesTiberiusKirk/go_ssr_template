@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	homePageUri = "/"
+	homePageURI = "/"
 )
 
 type HomePage struct {
@@ -21,7 +21,7 @@ func NewHomePage() *Page {
 		MenuID:      "homePage",
 		Title:       "Home Page",
 		Frame:       true,
-		Path:        homePageUri,
+		Path:        homePageURI,
 		Template:    "homepage/homepage.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,

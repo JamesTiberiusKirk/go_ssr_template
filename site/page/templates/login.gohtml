@@ -1,9 +1,9 @@
 {{ define "content" }}
 
 <h1>Login Page</h1>
-{{ if .meta.UrlError }}
+{{ if .meta.URLError }}
   <h1>ERROR</h1>
-  <h1>{{ .meta.UrlError }}</h1>
+  <h1>{{ .meta.URLError }}</h1>
 {{ end }}
 
 {{ if .meta.Success }}

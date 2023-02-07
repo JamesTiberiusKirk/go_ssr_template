@@ -69,9 +69,6 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.16
 ## explicit; go 1.15
 github.com/mattn/go-isatty
-# github.com/rwtodd/Go.Sed v0.0.0-20210816025313-55464686f9ef
-## explicit
-github.com/rwtodd/Go.Sed/sed
 # github.com/sirupsen/logrus v1.9.0
 ## explicit; go 1.13
 github.com/sirupsen/logrus

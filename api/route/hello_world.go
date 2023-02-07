@@ -7,20 +7,20 @@ import (
 )
 
 const (
-	helloWorldApiRoute = "/"
+	helloWorldAPIRoute = "/"
 )
 
-// HelloWorld user route dependency struct
+// HelloWorld user route dependency struct.
 type HelloWorld struct {
 }
 
-// NewHelloWorld struct instance
+// NewHelloWorld struct instance.
 func NewHelloWorld() *Route {
 	depts := &HelloWorld{}
 
 	return &Route{
 		RouteID:    "helloWorld",
-		Path:       helloWorldApiRoute,
+		Path:       helloWorldAPIRoute,
 		Depts:      depts,
 		GetHandler: depts.Hello,
 	}

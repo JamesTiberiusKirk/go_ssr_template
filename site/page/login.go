@@ -1,9 +1,10 @@
 package page
 
 import (
+	"net/http"
+
 	"github.com/JamesTiberiusKirk/go_web_template/models"
 	"github.com/JamesTiberiusKirk/go_web_template/session"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	loginPageUri = "/login"
+	loginPageURI = "/login"
 )
 
 type LoginPage struct {
@@ -32,7 +33,7 @@ func NewLoginPage(db *gorm.DB, sessionManager *session.Manager) *Page {
 		MenuID:      "loginPage",
 		Title:       "Login",
 		Frame:       true,
-		Path:        loginPageUri,
+		Path:        loginPageURI,
 		Template:    "login.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
@@ -51,7 +52,7 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 	}
 
 	if submitUser.Password == "" || submitUser.Email == "" {
-		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=need username and password")
+		return c.Redirect(http.StatusSeeOther, loginPageURI+"?error=need username and password")
 	}
 
 	dbUser := &models.User{}
@@ -60,10 +61,10 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 		logrus.
 			WithError(result.Error).
 			Error("error getting user from the database")
-		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=internal server problem")
+		return c.Redirect(http.StatusSeeOther, loginPageURI+"?error=internal server problem")
 	}
 	if dbUser.Password == "" {
-		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=wrong user name or password")
+		return c.Redirect(http.StatusSeeOther, loginPageURI+"?error=wrong user name or password")
 	}
 
 	comparison, err := dbUser.ComparePassword(submitUser.Password)
@@ -71,13 +72,13 @@ func (p *LoginPage) PostHandler(c echo.Context) error {
 		logrus.
 			WithError(err).
 			Error("error comparing passwords")
-		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=internal server problem")
+		return c.Redirect(http.StatusSeeOther, loginPageURI+"?error=internal server problem")
 	}
 
 	if !comparison {
-		return c.Redirect(http.StatusSeeOther, loginPageUri+"?error=wrong user name or password")
+		return c.Redirect(http.StatusSeeOther, loginPageURI+"?error=wrong user name or password")
 	}
 
 	p.sessionManager.InitSession(*dbUser, c)
-	return c.Redirect(http.StatusSeeOther, userSsrPageUri)
+	return c.Redirect(http.StatusSeeOther, userSsrPageURI)
 }

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func stringyfyJson(object any) string {
+func stringyfyJSON(object any) string {
 	stringObject, _ := json.Marshal(object)
 	return string(stringObject)
 }

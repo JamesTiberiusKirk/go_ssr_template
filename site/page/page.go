@@ -1,22 +1,24 @@
 package page
 
 import (
+	"errors"
+
 	"github.com/JamesTiberiusKirk/go_web_template/server"
 	"github.com/JamesTiberiusKirk/go_web_template/session"
 
 	"github.com/labstack/echo/v4"
 )
 
-// PageMetaData is used to give certain page meta data and basic params to each template
-type PageMetaData struct {
+// MetaData is used to give certain page meta data and basic params to each template.
+type MetaData struct {
 	MenuID   string
 	Title    string
-	UrlError string
+	URLError string
 	Success  string
 }
 
 // Page is used by every page in a site
-// Deps being each page's own struct for dependencies, might not even be needed
+// Deps being each page's own struct for dependencies, might not even be needed.
 type Page struct {
 	MenuID        string
 	Title         string
@@ -30,36 +32,24 @@ type Page struct {
 	PutHandler    echo.HandlerFunc
 }
 
-// ContextParams is for the context passed to the controllers
-type ContextParams struct {
-	UseFrame bool
-}
-
 const (
 	UseFrameName = "frame"
 )
 
-func createContext(frame bool) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			c.Set(UseFrameName, ContextParams{UseFrame: frame})
-			return next(c)
-		}
-	}
-}
-
-// GetPageHandler is a get handler which uses the echo Render function
-func (p *Page) GetPageHandler(httpStatus int, session session.Manager, routesMap map[string]server.RoutesMap) echo.HandlerFunc {
+// GetPageHandler is a get handler which uses the echo Render function.
+func (p *Page) GetPageHandler(httpStatus int, session session.Manager,
+	routesMap map[string]server.RoutesMap) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		c.Set(UseFrameName, p.Frame)
-		auth := echo.Map{}
+		var auth echo.Map
+
 		user, err := session.GetUser(c)
 		if err != nil {
-			if err.Error() == "securecookie: the value is not valid" {
-				auth = echo.Map{}
-			} else {
+			if errors.Is(err, errors.New("securecookie: the value is not valid")) {
 				return err
 			}
+
+			auth = echo.Map{}
 		} else {
 			auth = echo.Map{
 				"email":    user.Email,
@@ -87,11 +77,11 @@ func (p *Page) GetPageHandler(httpStatus int, session session.Manager, routesMap
 	}
 }
 
-func (p *Page) buildBasePageMetaData(c echo.Context) PageMetaData {
-	return PageMetaData{
+func (p *Page) buildBasePageMetaData(c echo.Context) MetaData {
+	return MetaData{
 		MenuID:   p.MenuID,
 		Title:    p.Title,
-		UrlError: c.QueryParam("error"),
+		URLError: c.QueryParam("error"),
 		Success:  c.QueryParam("success"),
 	}
 }

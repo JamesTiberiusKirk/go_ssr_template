@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	userPageUri = "/user"
+	userPageURI = "/user"
 )
 
 type UserPage struct {
@@ -33,7 +33,7 @@ func NewUserPage(db *gorm.DB, session *session.Manager) *Page {
 		MenuID:      "userPage",
 		Title:       "User Page",
 		Frame:       true,
-		Path:        userPageUri,
+		Path:        userPageURI,
 		Template:    "user/user.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,
@@ -46,7 +46,7 @@ func (p *UserPage) GetPageData(c echo.Context) any {
 		query := map[string]string{
 			"error": internalServerError,
 		}
-		redirect(c, loginPageUri, query)
+		_ = redirect(c, loginPageURI, query)
 		return err
 	}
 
@@ -59,7 +59,7 @@ func (p *UserPage) GetPageData(c echo.Context) any {
 		query := map[string]string{
 			"error": internalServerError,
 		}
-		return redirect(c, loginPageUri, query)
+		return redirect(c, loginPageURI, query)
 	}
 	return UserPageData{*dbUser}
 }

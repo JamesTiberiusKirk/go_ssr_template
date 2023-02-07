@@ -2,6 +2,7 @@ package page
 
 import (
 	"fmt"
+
 	"github.com/JamesTiberiusKirk/go_web_template/models"
 	"github.com/JamesTiberiusKirk/go_web_template/session"
 
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	signupPageUri = "/signup"
+	signupPageURI = "/signup"
 )
 
 type SignupPage struct {
@@ -82,7 +83,7 @@ func (p *SignupPage) PostHandler(c echo.Context) error {
 			WithError(err).
 			Error("Error validating signup form")
 		query["error"] = internalServerError
-		return redirect(c, signupPageUri, query)
+		return redirect(c, signupPageURI, query)
 	}
 
 	if user.Password != user.RepeatPassword {
@@ -94,10 +95,14 @@ func (p *SignupPage) PostHandler(c echo.Context) error {
 		for _, fields := range notPassed {
 			query[fields] = "not valid"
 		}
-		return redirect(c, signupPageUri, query)
+		return redirect(c, signupPageURI, query)
 	}
 
-	user.SetPassword(user.Password)
+	err = user.SetPassword(user.Password)
+	if err != nil {
+		query["error"] = internalServerError
+		return redirect(c, signupPageURI, query)
+	}
 
 	result := p.db.WithContext(c.Request().Context()).Create(&user.User)
 	if result.Error != nil {
@@ -107,9 +112,9 @@ func (p *SignupPage) PostHandler(c echo.Context) error {
 			Error(msg)
 
 		query["error"] = internalServerError
-		return redirect(c, signupPageUri, query)
+		return redirect(c, signupPageURI, query)
 	}
 
 	p.sessionManager.InitSession(user.User, c)
-	return redirect(c, homePageUri, nil)
+	return redirect(c, userPageURI, nil)
 }

@@ -1,23 +1,24 @@
 package route
 
 import (
-	"github.com/JamesTiberiusKirk/go_web_template/models"
 	"net/http"
+
+	"github.com/JamesTiberiusKirk/go_web_template/models"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
 const (
-	userApiRoute = "/:email"
+	userAPIRoute = "/:email"
 )
 
-// UserRoute user route dependency struct
+// UserRoute user route dependency struct.
 type UserRoute struct {
 	db *gorm.DB
 }
 
-// NewUserRoute struct instance
+// NewUserRoute struct instance.
 func NewUserRoute(db *gorm.DB) *Route {
 	depts := &UserRoute{
 		db: db,
@@ -25,7 +26,7 @@ func NewUserRoute(db *gorm.DB) *Route {
 
 	return &Route{
 		RouteID:    "user",
-		Path:       usersApiRoute,
+		Path:       userAPIRoute,
 		Depts:      depts,
 		GetHandler: depts.GetUser,
 	}
@@ -40,7 +41,7 @@ func (r *UserRoute) GetUser(c echo.Context) error {
 	user := models.User{}
 	result := r.db.Where(models.User{Email: userEmail}).Find(&user)
 	if result.Error != nil {
-		c.NoContent(http.StatusInternalServerError)
+		_ = c.NoContent(http.StatusInternalServerError)
 		return result.Error
 	}
 

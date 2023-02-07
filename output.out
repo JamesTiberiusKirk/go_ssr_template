@@ -1,0 +1,62 @@
+[PANIC RECOVER] runtime error: invalid memory address or nil pointer dereference goroutine 7 [running]:
+github.com/labstack/echo/v4/middleware.RecoverWithConfig.func1.1.1()
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/middleware/recover.go:93 +0x14e
+panic({0xa72b20, 0xfcb2d0})
+	/usr/lib/go/src/runtime/panic.go:884 +0x212
+html/template.(*Template).Funcs(...)
+	/usr/lib/go/src/html/template/template.go:339
+github.com/JamesTiberiusKirk/go_web_template/site/renderer.(*ViewEngine).executeTemplate(0xc000262960, {0xc0f6a0, 0xc0002ccf90}, {0xb21f4f, 0x18}, {0xa7c9e0?, 0xc0002ccf30?}, {0xb18eb0, 0xa})
+	/home/darthvader/Projects/go_web_template/site/renderer/renderer.go:158 +0x566
+github.com/JamesTiberiusKirk/go_web_template/site/renderer.(*ViewEngine).RenderWriter(...)
+	/home/darthvader/Projects/go_web_template/site/renderer/renderer.go:98
+github.com/JamesTiberiusKirk/go_web_template/site/renderer.(*ViewEngine).Render(0xabbfa0?, {0xc0f6a0, 0xc0002ccf90}, {0xb21f4f, 0x18}, {0xa7c9e0, 0xc0002ccf30}, {0xc1b8d0?, 0xc000262aa0?})
+	/home/darthvader/Projects/go_web_template/site/renderer/renderer.go:86 +0xcb
+github.com/labstack/echo/v4.(*context).Render(0xc000262aa0, 0xc0002ccf30?, {0xb21f4f, 0x18}, {0xa7c9e0, 0xc0002ccf30})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/context.go:454 +0xc8
+github.com/JamesTiberiusKirk/go_web_template/site/page.(*Page).GetPageHandler.func1({0xc1b8d0, 0xc000262aa0})
+	/home/darthvader/Projects/go_web_template/site/page/page.go:71 +0x565
+github.com/labstack/echo/v4.(*Echo).add.func1({0xc1b8d0, 0xc000262aa0})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/echo.go:546 +0x51
+github.com/labstack/echo/v4/middleware.RecoverWithConfig.func1.1({0xc1b8d0, 0xc000262aa0})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/middleware/recover.go:119 +0xfe
+github.com/labstack/echo/v4/middleware.GzipWithConfig.func1.1({0xc1b8d0, 0xc000262aa0})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/middleware/compress.go:98 +0x423
+github.com/labstack/echo/v4/middleware.RequestLoggerConfig.ToMiddleware.func1.1({0xc1b8d0, 0xc000262aa0})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/middleware/request_logger.go:259 +0x168
+github.com/labstack/echo/v4.(*Echo).ServeHTTP(0xc00026cb40, {0xc15308?, 0xc00026e2a0}, 0xc00023e300)
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/echo.go:633 +0x3d1
+net/http.serverHandler.ServeHTTP({0xc0002ccc60?}, {0xc15308, 0xc00026e2a0}, 0xc00023e300)
+	/usr/lib/go/src/net/http/server.go:2947 +0x30c
+net/http.(*conn).serve(0xc000262a00, {0xc15d50, 0xc0002ccb70})
+	/usr/lib/go/src/net/http/server.go:1991 +0x607
+created by net/http.(*Server).Serve
+	/usr/lib/go/src/net/http/server.go:3102 +0x4db
+
+goroutine 1 [IO wait]:
+internal/poll.runtime_pollWait(0x7fe2ec099b88, 0x72)
+	/usr/lib/go/src/runtime/netpoll.go:305 +0x89
+internal/poll.(*pollDesc).wait(0xc0002adc00?, 0x6?, 0x0)
+	/usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x32
+internal/poll.(*pollDesc).waitRead(...)
+	/usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Accept(0xc0002adc00)
+	/usr/lib/go/src/internal/poll/fd_unix.go:614 +0x234
+net.(*netFD).accept(0xc0002adc00)
+	/usr/lib/go/src/net/fd_unix.go:172 +0x35
+net.(*TCPListener).accept(0xc0002a8750)
+	/usr/lib/go/src/net/tcpsock_posix.go:142 +0x28
+net.(*TCPListener).AcceptTCP(0xc0002a8750)
+	/usr/lib/go/src/net/tcpsock.go:275 +0x3d
+github.com/labstack/echo/v4.tcpKeepAliveListener.Accept({0x442620?})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/echo.go:953 +0x1d
+net/http.(*Server).Serve(0xc0000c7e00, {0xc14eb8, 0xc0000152d8})
+	/usr/lib/go/src/net/http/server.go:3070 +0x385
+github.com/labstack/echo/v4.(*Echo).Start(0xc00026cb40, {0xc0002092ca, 0x5})
+	/home/darthvader/Projects/go_web_template/vendor/github.com/labstack/echo/v4/echo.go:650 +0xce
+main.main()
+	/home/darthvader/Projects/go_web_template/main.go:29 +0x289
+
+goroutine 6 [select]:
+database/sql.(*DB).connectionOpener(0xc00023ac30, {0xc15ca8, 0xc000268bc0})
+	/usr/lib/go/sr
+

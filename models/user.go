@@ -9,9 +9,12 @@ import (
 )
 
 const (
-	hashCost   = 4
+	hashCost = 4
+
+	//nolint:lll // Email regex so cannot be split
 	emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 
+	//nolint:gosec // This is just a regex
 	passwordRegex = `^[a-zA-Z]\w{3,14}$`
 )
 
@@ -29,7 +32,6 @@ type User struct {
 // SetPassword will accept a string password and attempt to hash and salt it. Providing the
 // hash is successful, the Password field of the User will be updated.
 func (u *User) SetPassword(password string) error {
-
 	pass, err := bcrypt.GenerateFromPassword([]byte(password), hashCost)
 	if err != nil {
 		return err
@@ -46,9 +48,8 @@ func (u *User) SetPassword(password string) error {
 // If an error is returned, it means that the passwords weren't able to be compared, and so
 // the result cannot be trusted.
 func (u *User) ComparePassword(password string) (bool, error) {
-
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
-	if err == bcrypt.ErrMismatchedHashAndPassword {
+	if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 		return false, nil
 	}
 
@@ -60,7 +61,7 @@ func (u *User) ComparePassword(password string) (bool, error) {
 }
 
 // Validate used to validate the data in this struct, needs to be ran before password
-// hashing
+// hashing.
 func (u *User) Validate() ([]string, error) {
 	result := []string{}
 

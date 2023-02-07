@@ -10,17 +10,17 @@ import (
 
 type Config struct {
 	Debug bool `env:"DEBUG"`
-	Db    struct {
+	DB    struct {
 		Name string `env:"DB_NAME"`
 		Host string `env:"DB_HOST"`
 		Port int    `env:"DB_PORT"`
 		User string `env:"DB_USER"`
 		Pass string `env:"DB_PASS"`
 	}
-	Http struct {
+	HTTP struct {
 		Port         string `env:"HTTP_PORT"`
 		RootSitePath string `env:"HTTP_ROOT_PATH"`
-		RootApiPath  string `env:"HTTP_ROOT_API_PATH"`
+		RootAPIPath  string `env:"HTTP_ROOT_API_PATH"`
 	}
 	SessionSecret string `env:"SESSION_SECRET"`
 	Extras        env.EnvSet

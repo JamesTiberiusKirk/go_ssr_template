@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	notFoundPageUri = "/*"
+	notFoundPageURI = "/*"
 )
 
 type NotFoundPage struct {
@@ -21,7 +21,7 @@ func NewNotFoundPage() *Page {
 		MenuID:      "notFoundPage",
 		Title:       "NotFound",
 		Frame:       true,
-		Path:        notFoundPageUri,
+		Path:        notFoundPageURI,
 		Template:    "not-found.gohtml",
 		Deps:        deps,
 		GetPageData: deps.GetPageData,

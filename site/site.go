@@ -1,15 +1,16 @@
 package site
 
 import (
+	"html/template"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+
 	"github.com/JamesTiberiusKirk/go_web_template/server"
 	"github.com/JamesTiberiusKirk/go_web_template/session"
 	"github.com/JamesTiberiusKirk/go_web_template/site/page"
 	"github.com/JamesTiberiusKirk/go_web_template/site/renderer"
 	"github.com/JamesTiberiusKirk/go_web_template/site/spa"
-	"html/template"
-	"net/http"
-	"net/http/httputil"
-	"net/url"
 
 	"github.com/labstack/echo/v4"
 	echoMw "github.com/labstack/echo/v4/middleware"
@@ -20,7 +21,7 @@ const (
 	siteName = "site"
 )
 
-// Site site struct with config and dependencies
+// Site site struct with config and dependencies.
 type Site struct {
 	dev            bool
 	rootSitePath   string
@@ -37,7 +38,7 @@ type Site struct {
 	routes         map[string]server.RoutesMap
 }
 
-// NewSite init Site
+// NewSite init Site.
 func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 	sessionManager *session.Manager, dev bool) *Site {
 	return &Site{
@@ -68,7 +69,7 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 			"no_frame": "no_frame.gohtml",
 		},
 		tmplFuncs: template.FuncMap{
-			"stringify": stringyfyJson,
+			"stringify": stringyfyJSON,
 		},
 		routes: map[string]server.RoutesMap{
 			"site": {},
@@ -76,27 +77,27 @@ func NewSite(e *echo.Echo, rootSitePath string, db *gorm.DB,
 	}
 }
 
-// Serve to start the server
+// Serve to start the server.
 func (s *Site) Serve() {
 	s.buildRenderer()
 
 	s.mapPages(&s.publicPages)
-	s.mapPages(&s.authedPages, session.SessionAuthMiddleware(s.sessionManager))
+	s.mapPages(&s.authedPages, sessionAuthMiddleware(s.sessionManager))
 
 	// Mapping 404 page
 	s.echo.GET(s.rootSitePath+s.notFoundPage.Path,
 		s.notFoundPage.GetPageHandler(http.StatusNotFound, *s.sessionManager, s.routes))
 
 	s.mapStatic()
-	s.mapSpaSites()
+	s.mapSPASites()
 }
 
-// GetRoutes to get routes which have been made in the server
+// GetRoutes to get routes which have been made in the server.
 func (s *Site) GetRoutes() server.RoutesMap {
 	return s.routes["site"]
 }
 
-// SetRoutes which would be used in the templating engine
+// SetRoutes which would be used in the templating engine.
 func (s *Site) SetRoutes(t string, r server.RoutesMap) {
 	s.routes[t] = r
 }
@@ -111,7 +112,7 @@ func (s *Site) buildRenderer() {
 	})
 }
 
-func (s *Site) mapSpaSites(middlewares ...echo.MiddlewareFunc) {
+func (s *Site) mapSPASites(_ ...echo.MiddlewareFunc) {
 	for _, spa := range s.spaSites {
 		route := s.rootSitePath + spa.Path
 

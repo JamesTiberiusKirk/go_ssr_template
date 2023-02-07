@@ -13,7 +13,7 @@ const (
 )
 
 func redirect(c echo.Context, uri string, query map[string]string) error {
-	if query != nil && len(query) > 0 {
+	if len(query) > 0 {
 		withQuery := fmt.Sprintf("%s?", uri)
 
 		for k, v := range query {

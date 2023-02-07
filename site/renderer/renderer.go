@@ -3,14 +3,15 @@ package renderer
 import (
 	"bytes"
 	"fmt"
-	"github.com/JamesTiberiusKirk/go_web_template/site/page"
 	"html/template"
 	"io"
-	"io/ioutil"
+
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
+
+	"github.com/JamesTiberiusKirk/go_web_template/site/page"
 
 	"github.com/labstack/echo/v4"
 )
@@ -23,20 +24,19 @@ const (
 
 type TemplateType string
 
-// HTMLContentType const templateEngineKey = "httpx_templateEngine"
-var HTMLContentType = []string{"text/html; charset=utf-8"}
-
-// DefaultConfig default config
-var DefaultConfig = Config{
-	Root:         "views",
-	Master:       "layouts/master",
-	Partials:     []string{},
-	Funcs:        make(template.FuncMap),
-	DisableCache: false,
-	Delims:       Delims{Left: "{{", Right: "}}"},
+// DefaultConfig default config.
+func DefaultConfig() Config {
+	return Config{
+		Root:         "views",
+		Master:       "layouts/master",
+		Partials:     []string{},
+		Funcs:        make(template.FuncMap),
+		DisableCache: false,
+		Delims:       Delims{Left: "{{", Right: "}}"},
+	}
 }
 
-// ViewEngine view template engine
+// ViewEngine view template engine.
 type ViewEngine struct {
 	config      Config
 	tplMap      map[string]*template.Template
@@ -44,27 +44,27 @@ type ViewEngine struct {
 	fileHandler FileHandler
 }
 
-// Config configuration options
+// Config configuration options.
 type Config struct {
-	Root         string           //view root
-	Master       string           //template master
-	NoFrame      string           //template master
-	Partials     []string         //template partial, such as head, foot
-	Funcs        template.FuncMap //template functions
-	DisableCache bool             //disable cache, debug mode
-	Delims       Delims           //delimeters
+	Root         string           // view root
+	Master       string           // template master
+	NoFrame      string           // template master
+	Partials     []string         // template partial, such as head, foot
+	Funcs        template.FuncMap // template functions
+	DisableCache bool             // disable cache, debug mode
+	Delims       Delims           // delimeters
 }
 
-// M map interface for data
+// M map interface for data.
 type M map[string]interface{}
 
-// Delims delims for template
+// Delims delims for template.
 type Delims struct {
 	Left  string
 	Right string
 }
 
-// New new template engine
+// New new template engine.
 func New(config Config) *ViewEngine {
 	return &ViewEngine{
 		config:      config,
@@ -74,20 +74,21 @@ func New(config Config) *ViewEngine {
 	}
 }
 
-// Default new default template engine
+// Default new default template engine.
 func Default() *ViewEngine {
-	return New(DefaultConfig)
+	return New(DefaultConfig())
 }
 
-// Render render template for echo interface
+// Render render template for echo interface.
 func (e *ViewEngine) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	//nolint:errcheck // No error to check
 	frame := c.Get(page.UseFrameName).(bool)
 	return e.RenderWriter(w, name, data, frame)
 }
 
-// RenderWriter render template with io.Writer
+// RenderWriter render template with io.Writer.
 func (e *ViewEngine) RenderWriter(w io.Writer, name string, data interface{}, useMaster bool) error {
-	frame := Master
+	var frame TemplateType
 	if useMaster {
 		frame = Master
 	} else {
@@ -97,6 +98,7 @@ func (e *ViewEngine) RenderWriter(w io.Writer, name string, data interface{}, us
 	return e.executeTemplate(w, name, data, frame)
 }
 
+//nolint:funlen,gocognit // Too much to unpack for this version
 func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{}, frame TemplateType) error {
 	var tpl *template.Template
 	var err error
@@ -106,23 +108,28 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 
 	allFuncs["include"] = func(tmpl string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
-		err := e.executeTemplate(buf, tmpl, data, Include)
-		return template.HTML(buf.String()), err
+		errInclude := e.executeTemplate(buf, tmpl, data, Include)
+		//nolint:gosec // This is not user submitted data, we want that to be html because it is an include.
+		return template.HTML(buf.String()), errInclude
 	}
 
 	allFuncs["includeJs"] = func(tmpl string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
-		err := e.executeTemplate(buf, tmpl, data, Include)
+		errInclude := e.executeTemplate(buf, tmpl, data, Include)
+		//nolint:gosec // This is not user submitted data, we want that to be html because it is an include.
 		js := template.JS(buf.String())
-		return template.HTML("\n<script>\n" + js + "\n</script>\n"), err
+		//nolint:gosec // This is not user submitted data, we want that to be html because it is an include.
+		return template.HTML("\n<script>\n" + js + "\n</script>\n"), errInclude
 	}
 
 	allFuncs["includeTs"] = func(tmpl string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
 		path := "jsdist/" + strings.Replace(tmpl, ".ts", ".js", 1)
-		err := e.executeTemplate(buf, path, data, Include)
+		errInclude := e.executeTemplate(buf, path, data, Include)
+		//nolint:gosec // This is not user submitted data, we want that to be html because it is an include.
 		js := template.JS(buf.String())
-		return template.HTML("\n<script>\n" + js + "\n</script>\n"), err
+		//nolint:gosec // This is not user submitted data, we want that to be html because it is an include.
+		return template.HTML("\n<script>\n" + js + "\n</script>\n"), errInclude
 	}
 
 	// Get the plugin collection
@@ -141,6 +148,7 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 		exeName = e.config.NoFrame
 	}
 
+	//nolint:nestif // Too much to unpack for this version
 	if !ok || e.config.DisableCache {
 		tplList := make([]string, 0)
 		if frame == Master {
@@ -172,7 +180,7 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 			}
 			_, err = tmpl.Parse(data)
 			if err != nil {
-				return fmt.Errorf("ViewEngine render parser name:%v, error: %v", t, err)
+				return fmt.Errorf("ViewEngine render parser name:%v, error: %w", t, err)
 			}
 		}
 
@@ -184,27 +192,27 @@ func (e *ViewEngine) executeTemplate(out io.Writer, name string, data interface{
 	// Display the content to the screen
 	err = tpl.Funcs(allFuncs).ExecuteTemplate(out, exeName, data)
 	if err != nil {
-		return fmt.Errorf("ViewEngine execute template error: %v", err)
+		return fmt.Errorf("ViewEngine execute template error: %w", err)
 	}
 
 	return nil
 }
 
-// FileHandler file handler interface
+// FileHandler file handler interface.
 type FileHandler func(config Config, tplFile string) (content string, err error)
 
 // defaultFileHandler new default file handler
-// This is just supposed to read the file and return a string as content
+// This is just supposed to read the file and return a string as content.
 func defaultFileHandler() FileHandler {
-	return func(config Config, tplFile string) (content string, err error) {
+	return func(config Config, tplFile string) (string, error) {
 		// Get the absolute path of the root template
 		path, err := filepath.Abs(config.Root + string(os.PathSeparator) + tplFile)
 		if err != nil {
-			return "", fmt.Errorf("ViewEngine path:%v error: %v", path, err)
+			return "", fmt.Errorf("ViewEngine path:%v error: %w", path, err)
 		}
-		data, err := ioutil.ReadFile(path)
+		data, err := os.ReadFile(path)
 		if err != nil {
-			return "", fmt.Errorf("ViewEngine render read name:%v, path:%v, error: %v", tplFile, path, err)
+			return "", fmt.Errorf("ViewEngine render read name:%v, path:%v, error: %w", tplFile, path, err)
 		}
 		return string(data), nil
 	}
